@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title>评分星星</title>
+<style>
+body{
+    
+}
+    #pf{
+        width: 200px;
+        margin-left: 300px;
+        height: 28px;
+    }
+    #pf li{
+        list-style: none;
+        float: left;
+        background: url(star.gif) no-repeat  0  0;
+        width: 27px;
+        height: 28px;
+    }
+</style>
+<script type="text/javascript">
+    window.onload=function()
+    {
+        var  pf=document.getElementById('pf');
+        var  xx=pf.getElementsByTagName('li');
+        var i;
+        for(i=0;i<xx.length;i++)
+        {
+             xx[i].index=i;
+             xx[i].onmouseover=function()
+             {
+                for(i=0;i<xx.length;i++)
+                {
+                    if(i<=this.index)
+                    {
+                              xx[i].style.background='url(star.gif) no-repeat 0  -28px';
+                    }
+                    else
+                    {
+                             xx[i].style.background='url(star.gif) no-repeat 0  0px';
+                    }
+                }
+             };
+             xx[i].onmousedown=function()
+             {
+                alert('你提交的是:'+(this.index+1)+'分');
+             };
+
+
+        }
+
+    };
+</script>
+</head>
+<body>
+<div  id='pf'>
+   <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+   </ul>
+</div>
+</body>
+</html>
+
+
