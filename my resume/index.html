@@ -1,0 +1,812 @@
+﻿<!doctype html>
+<head>
+    <meta  charset="UTF-8" />
+    <title>
+        body
+    </title>
+    <style type="text/css">
+        html { 
+			overflow:hidden; 
+			-ms-touch-action:none;
+			-ms-content-zooming:none;
+        } 
+		body { 
+			position:absolute; 
+			margin:0px; 
+			padding:0px; 
+			background:#fff;
+			width:100%;
+            height:100%; 
+			}
+		
+		#canvas { 
+			position:absolute; 
+			width:100%; 
+			height:100%; 
+        }
+	
+    </style>
+    <script type="text/javascript" src="js/jquery.js">
+    </script>
+   
+    <script type="text/javascript" src="js/ge1doot.js">
+    </script>
+    <script type="text/javascript">
+        "use strict";
+
+        (function() {
+            /* ==== definitions ==== */
+            var diapo = [],
+            layers = [],
+            ctx,
+            pointer,
+            scr,
+            camera,
+            light,
+            fps = 0,
+            quality = [1, 2],
+            // ---- poly constructor ----
+            Poly = function(parent, face) {
+                this.parent = parent;
+                this.ctx = ctx;
+                this.color = face.fill || false;
+                this.points = [];
+                if (!face.img) {
+                    // ---- create points ----
+                    for (var i = 0; i < 4; i++) {
+                        this.points[i] = new ge1doot.transform3D.Point(parent.pc.x + (face.x[i] * parent.normalZ) + (face.z[i] * parent.normalX), parent.pc.y + face.y[i], parent.pc.z + (face.x[i] * parent.normalX) + ( - face.z[i] * parent.normalZ));
+                    }
+                    this.points[3].next = false;
+                }
+            },
+            // ---- diapo constructor ----
+            Diapo = function(path, img, structure) {
+                // ---- create image ----
+                this.img = new ge1doot.transform3D.Image(this, path + img.img, 1, {
+                    isLoaded: function(img) {
+                        img.parent.isLoaded = true;
+                        img.parent.loaded(img);
+                    }
+                });
+                this.visible = false;
+                this.normalX = img.nx;
+                this.normalZ = img.nz;
+                // ---- point center ----
+                this.pc = new ge1doot.transform3D.Point(img.x, img.y, img.z);
+                // ---- target positions ----
+                this.tx = img.x + (img.nx * Math.sqrt(camera.focalLength) * 20);
+                this.tz = img.z - (img.nz * Math.sqrt(camera.focalLength) * 20);
+                // ---- create polygons ----
+                this.poly = [];
+                for (var i = -1,
+                p; p = structure[++i];) {
+                    layers[i] = (p.img === true ? 1 : 2);
+                    this.poly.push(new Poly(this, p));
+                }
+            },
+            // ---- init section ----
+            init = function(json) {
+                // draw poly primitive
+                Poly.prototype.drawPoly = ge1doot.transform3D.drawPoly;
+                // ---- init screen ----
+                scr = new ge1doot.Screen({
+                    container: "canvas"
+                });
+                ctx = scr.ctx;
+                scr.resize();
+                // ---- init pointer ----
+                pointer = new ge1doot.Pointer({
+                    tap: function() {
+                        if (camera.over) {
+                            if (camera.over === camera.target.elem) {
+                                // ---- return to the center ----
+                                camera.target.x = 0;
+                                camera.target.z = 0;
+                                camera.target.elem = false;
+                            } else {
+                                // ---- goto diapo ----
+                                camera.target.elem = camera.over;
+                                camera.target.x = camera.over.tx;
+                                camera.target.z = camera.over.tz;
+                                // ---- adapt tesselation level to distance ----
+                                for (var i = 0,
+                                d; d = diapo[i++];) {
+                                    var dx = camera.target.x - d.pc.x;
+                                    var dz = camera.target.z - d.pc.z;
+                                    var dist = Math.sqrt(dx * dx + dz * dz);
+                                    var lev = (dist > 1500) ? quality[0] : quality[1];
+                                    d.img.setLevel(lev);
+                                }
+                            }
+                        }
+                    }
+                });
+                // ---- init camera ----
+                camera = new ge1doot.transform3D.Camera({
+                    focalLength: Math.sqrt(scr.width) * 10,
+                    easeTranslation: 0.025,
+                    easeRotation: 0.06,
+                    disableRz: true
+                },
+                {
+                    move: function() {
+                        this.over = false;
+                        // ---- rotation ----
+                        if (pointer.isDraging) {
+                            this.target.elem = false;
+                            this.target.ry = -pointer.Xi * 0.01;
+                            this.target.rx = (pointer.Y - scr.height * 0.5) / (scr.height * 0.5);
+                        } else {
+                            if (this.target.elem) {
+                                this.target.ry = Math.atan2(this.target.elem.pc.x - this.x, this.target.elem.pc.z - this.z);
+                            }
+                        }
+                        this.target.rx *= 0.9;
+                    }
+                });
+                camera.z = -10000;
+                camera.py = 0;
+                // ---- create images ----
+                for (var i = 0,
+                img; img = json.imgdata[i++];) {
+                    diapo.push(new Diapo(json.options.imagesPath, img, json.structure));
+                }
+                // ---- start engine ---- >>>
+                setInterval(function() {
+                    quality = (fps > 50) ? [2, 3] : [1, 2];
+                    fps = 0;
+                },
+                1000);
+                run();
+            },
+            // ---- main loop ----
+            run = function() {
+                // ---- clear screen ----
+                ctx.clearRect(0, 0, scr.width, scr.height);
+                // ---- camera ----
+                camera.move();
+                // ---- draw layers ----
+                for (var k = -1,
+                l; l = layers[++k];) {
+                    light = false;
+                    for (var i = 0,
+                    d; d = diapo[i++];) { (l === 1 && d.draw()) || (d.visible && d.poly[k].draw());
+                    }
+                }
+                // ---- cursor ----
+                if (camera.over && !pointer.isDraging) {
+                    scr.setCursor("pointer");
+                } else {
+                    scr.setCursor("move");
+                }
+                // ---- loop ----
+                fps++;
+                requestAnimFrame(run);
+            };
+            /* ==== prototypes ==== */
+            Poly.prototype.draw = function() {
+                // ---- color light ----
+                var c = this.color;
+                if (c.light || !light) {
+                    var s = c.light ? this.parent.light: 1;
+                    // ---- rgba color ----
+                    light = "rgba(" + Math.round(c.r * s) + "," + Math.round(c.g * s) + "," + Math.round(c.b * s) + "," + (c.a || 1) + ")";
+                    ctx.fillStyle = light;
+                }
+                // ---- paint poly ----
+                if (!c.light || this.parent.light < 1) {
+                    // ---- projection ----
+                    for (var i = 0; this.points[i++].projection(););
+                    this.drawPoly();
+                    ctx.fill();
+                }
+            }
+            /* ==== image onload ==== */
+            Diapo.prototype.loaded = function(img) {
+                // ---- create points ----
+                var d = [ - 1, 1, 1, -1, 1, 1, -1, -1];
+                var w = img.texture.width * 0.5;
+                var h = img.texture.height * 0.5;
+                for (var i = 0; i < 4; i++) {
+                    img.points[i] = new ge1doot.transform3D.Point(this.pc.x + (w * this.normalZ * d[i]), this.pc.y + (h * d[i + 4]), this.pc.z + (w * this.normalX * d[i]));
+                }
+            }
+            /* ==== images draw ==== */
+            Diapo.prototype.draw = function() {
+                // ---- visibility ----
+                this.pc.projection();
+                if (this.pc.Z > -(camera.focalLength >> 1) && this.img.transform3D(true)) {
+                    // ---- light ----
+                    this.light = 0.5 + Math.abs(this.normalZ * camera.cosY - this.normalX * camera.sinY) * 0.6;
+                    // ---- draw image ----
+                    this.visible = true;
+                    this.img.draw();
+                    // ---- test pointer inside ----
+                    if (pointer.hasMoved || pointer.isDown) {
+                        if (this.img.isPointerInside(pointer.X, pointer.Y)) camera.over = this;
+                    }
+                } else this.visible = false;
+                return true;
+            }
+            return {
+                // --- load data ----
+                load: function(data) {
+                    window.addEventListener('load',
+                    function() {
+                        ge1doot.loadJS("js/imageTransform3D.js", init, data);
+                    },
+                    false);
+                }
+            }
+        })().load({
+            imgdata: [
+            // north
+            {
+                img: 'imgs/1.gif',
+                x: -1000,
+                y: 0,
+                z: 1500,
+                nx: 0,
+                nz: 1
+            },
+            {
+                img: 'imgs/2.jpg',
+                x: 0,
+                y: 0,
+                z: 1500,
+                nx: 0,
+                nz: 1
+            },
+            {
+                img: 'imgs/3.gif',
+                x: 1000,
+                y: 0,
+                z: 1500,
+                nx: 0,
+                nz: 1
+            },
+            // east
+            {
+                img: 'imgs/4.gif',
+                x: 1500,
+                y: 0,
+                z: 1000,
+                nx: -1,
+                nz: 0
+            },
+            {
+                img: 'imgs/5.jpg',
+                x: 1500,
+                y: 0,
+                z: 0,
+                nx: -1,
+                nz: 0
+            },
+            {
+                img: 'imgs/6.jpg',
+                x: 1500,
+                y: 0,
+                z: -1000,
+                nx: -1,
+                nz: 0
+            },
+            // south
+            {
+                img: 'imgs/7.jpg',
+                x: 1000,
+                y: 0,
+                z: -1500,
+                nx: 0,
+                nz: -1
+            },
+            {
+                img: 'imgs/8.jpg',
+                x: 0,
+                y: 0,
+                z: -1500,
+                nx: 0,
+                nz: -1
+            },
+            {
+                img: 'imgs/9.jpg',
+                x: -1000,
+                y: 0,
+                z: -1500,
+                nx: 0,
+                nz: -1
+            },
+            // west
+            {
+                img: 'imgs/10.jpg',
+                x: -1500,
+                y: 0,
+                z: -1000,
+                nx: 1,
+                nz: 0
+            },
+            {
+                img: 'imgs/11.jpg',
+                x: -1500,
+                y: 0,
+                z: 0,
+                nx: 1,
+                nz: 0
+            },
+            {
+                img: 'imgs/12.gif',
+                x: -1500,
+                y: 0,
+                z: 1000,
+                nx: 1,
+                nz: 0
+            }],
+            structure: [{
+                // wall
+                fill: {
+                    r: 255,
+                    g: 255,
+                    b: 255,
+                    light: 1
+                },
+                x: [ - 1001, -490, -490, -1001],
+                z: [ - 500, -500, -500, -500],
+                y: [500, 500, -500, -500]
+            },
+            {
+                // wall
+                fill: {
+                    r: 255,
+                    g: 255,
+                    b: 255,
+                    light: 1
+                },
+                x: [ - 501, 2, 2, -500],
+                z: [ - 500, -500, -500, -500],
+                y: [500, 500, -500, -500]
+            },
+            {
+                // wall
+                fill: {
+                    r: 255,
+                    g: 255,
+                    b: 255,
+                    light: 1
+                },
+                x: [0, 502, 502, 0],
+                z: [ - 500, -500, -500, -500],
+                y: [500, 500, -500, -500]
+            },
+            {
+                // wall
+                fill: {
+                    r: 255,
+                    g: 255,
+                    b: 255,
+                    light: 1
+                },
+                x: [490, 1002, 1002, 490],
+                z: [ - 500, -500, -500, -500],
+                y: [500, 500, -500, -500]
+            },
+            {
+                // shadow
+                fill: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0.2
+                },
+                x: [ - 420, 420, 420, -420],
+                z: [ - 500, -500, -500, -500],
+                y: [150, 150, -320, -320]
+            },
+            {
+                // shadow
+                fill: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0.2
+                },
+                x: [ - 20, 20, 20, -20],
+                z: [ - 500, -500, -500, -500],
+                y: [250, 250, 150, 150]
+            },
+            {
+                // shadow
+                fill: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0.2
+                },
+                x: [ - 20, 20, 20, -20],
+                z: [ - 500, -500, -500, -500],
+                y: [ - 320, -320, -500, -500]
+            },
+            {
+                // shadow
+                fill: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0.2
+                },
+                x: [ - 20, 20, 10, -10],
+                z: [ - 500, -500, -100, -100],
+                y: [ - 500, -500, -500, -500]
+            },
+            {
+                // base
+                fill: {
+                    r: 32,
+                    g: 32,
+                    b: 32
+                },
+                x: [ - 50, 50, 50, -50],
+                z: [ - 150, -150, -50, -50],
+                y: [ - 500, -500, -500, -500]
+            },
+            {
+                // support
+                fill: {
+                    r: 16,
+                    g: 16,
+                    b: 16
+                },
+                x: [ - 10, 10, 10, -10],
+                z: [ - 100, -100, -100, -100],
+                y: [300, 300, -500, -500]
+            },
+            {
+                // frame
+                fill: {
+                    r: 255,
+                    g: 255,
+                    b: 255
+                },
+                x: [ - 320, -320, -320, -320],
+                z: [0, -20, -20, 0],
+                y: [ - 190, -190, 190, 190]
+            },
+            {
+                // frame
+                fill: {
+                    r: 255,
+                    g: 255,
+                    b: 255
+                },
+                x: [320, 320, 320, 320],
+                z: [0, -20, -20, 0],
+                y: [ - 190, -190, 190, 190]
+            },
+            {
+                img: true
+            },
+            {
+                // ceilingLight
+                fill: {
+                    r: 255,
+                    g: 128,
+                    b: 0
+                },
+                x: [ - 50, 50, 50, -50],
+                z: [450, 450, 550, 550],
+                y: [500, 500, 500, 500]
+            },
+            {
+                // groundLight
+                fill: {
+                    r: 255,
+                    g: 128,
+                    b: 0
+                },
+                x: [ - 50, 50, 50, -50],
+                z: [450, 450, 550, 550],
+                y: [ - 500, -500, -500, -500]
+            }],
+            options: {
+                imagesPath: ""
+            }
+        });
+    </script>
+</head>
+<body>
+    <canvas id="canvas">
+		<video  class="video" src="video/1.mp4 " autoplay  loop/>
+        你的浏览器不支持HTML5画布技术，请使用谷歌浏览器。
+    </canvas>
+    <audio style="display: none;" id="bg-player" src="mp3/example.mp3.js" loop preload="true" autoplay="true"
+    controls>
+    </audio>
+    <canvas id="sakura"></canvas>
+<!-- sakura shader -->
+<script id="sakura_point_vsh" type="x-shader/x_vertex">
+uniform mat4 uProjection;
+uniform mat4 uModelview;
+uniform vec3 uResolution;
+uniform vec3 uOffset;
+uniform vec3 uDOF;  //x:focus distance, y:focus radius, z:max radius
+uniform vec3 uFade; //x:start distance, y:half distance, z:near fade start
+
+attribute vec3 aPosition;
+attribute vec3 aEuler;
+attribute vec2 aMisc; //x:size, y:fade
+
+varying vec3 pposition;
+varying float psize;
+varying float palpha;
+varying float pdist;
+
+//varying mat3 rotMat;
+varying vec3 normX;
+varying vec3 normY;
+varying vec3 normZ;
+varying vec3 normal;
+
+varying float diffuse;
+varying float specular;
+varying float rstop;
+varying float distancefade;
+
+void main(void) {
+    // Projection is based on vertical angle
+    vec4 pos = uModelview * vec4(aPosition + uOffset, 1.0);
+    gl_Position = uProjection * pos;
+    gl_PointSize = aMisc.x * uProjection[1][1] / -pos.z * uResolution.y * 0.5;
+
+    pposition = pos.xyz;
+    psize = aMisc.x;
+    pdist = length(pos.xyz);
+    palpha = smoothstep(0.0, 1.0, (pdist - 0.1) / uFade.z);
+
+    vec3 elrsn = sin(aEuler);
+    vec3 elrcs = cos(aEuler);
+    mat3 rotx = mat3(
+        1.0, 0.0, 0.0,
+        0.0, elrcs.x, elrsn.x,
+        0.0, -elrsn.x, elrcs.x
+    );
+    mat3 roty = mat3(
+        elrcs.y, 0.0, -elrsn.y,
+        0.0, 1.0, 0.0,
+        elrsn.y, 0.0, elrcs.y
+    );
+    mat3 rotz = mat3(
+        elrcs.z, elrsn.z, 0.0, 
+        -elrsn.z, elrcs.z, 0.0,
+        0.0, 0.0, 1.0
+    );
+    mat3 rotmat = rotx * roty * rotz;
+    normal = rotmat[2];
+
+    mat3 trrotm = mat3(
+        rotmat[0][0], rotmat[1][0], rotmat[2][0],
+        rotmat[0][1], rotmat[1][1], rotmat[2][1],
+        rotmat[0][2], rotmat[1][2], rotmat[2][2]
+    );
+    normX = trrotm[0];
+    normY = trrotm[1];
+    normZ = trrotm[2];
+
+    const vec3 lit = vec3(0.6917144638660746, 0.6917144638660746, -0.20751433915982237);
+
+    float tmpdfs = dot(lit, normal);
+    if(tmpdfs < 0.0) {
+        normal = -normal;
+        tmpdfs = dot(lit, normal);
+    }
+    diffuse = 0.4 + tmpdfs;
+
+    vec3 eyev = normalize(-pos.xyz);
+    if(dot(eyev, normal) > 0.0) {
+        vec3 hv = normalize(eyev + lit);
+        specular = pow(max(dot(hv, normal), 0.0), 20.0);
+    }
+    else {
+        specular = 0.0;
+    }
+
+    rstop = clamp((abs(pdist - uDOF.x) - uDOF.y) / uDOF.z, 0.0, 1.0);
+    rstop = pow(rstop, 0.5);
+    //-0.69315 = ln(0.5)
+    distancefade = min(1.0, exp((uFade.x - pdist) * 0.69315 / uFade.y));
+}
+</script>
+<script id="sakura_point_fsh" type="x-shader/x_fragment">
+#ifdef GL_ES
+//precision mediump float;
+precision highp float;
+#endif
+
+uniform vec3 uDOF;  //x:focus distance, y:focus radius, z:max radius
+uniform vec3 uFade; //x:start distance, y:half distance, z:near fade start
+
+const vec3 fadeCol = vec3(0.08, 0.03, 0.06);
+
+varying vec3 pposition;
+varying float psize;
+varying float palpha;
+varying float pdist;
+
+//varying mat3 rotMat;
+varying vec3 normX;
+varying vec3 normY;
+varying vec3 normZ;
+varying vec3 normal;
+
+varying float diffuse;
+varying float specular;
+varying float rstop;
+varying float distancefade;
+
+float ellipse(vec2 p, vec2 o, vec2 r) {
+    vec2 lp = (p - o) / r;
+    return length(lp) - 1.0;
+}
+
+void main(void) {
+    vec3 p = vec3(gl_PointCoord - vec2(0.5, 0.5), 0.0) * 2.0;
+    vec3 d = vec3(0.0, 0.0, -1.0);
+    float nd = normZ.z; //dot(-normZ, d);
+    if(abs(nd) < 0.0001) discard;
+
+    float np = dot(normZ, p);
+    vec3 tp = p + d * np / nd;
+    vec2 coord = vec2(dot(normX, tp), dot(normY, tp));
+
+    //angle = 15 degree
+    const float flwrsn = 0.258819045102521;
+    const float flwrcs = 0.965925826289068;
+    mat2 flwrm = mat2(flwrcs, -flwrsn, flwrsn, flwrcs);
+    vec2 flwrp = vec2(abs(coord.x), coord.y) * flwrm;
+
+    float r;
+    if(flwrp.x < 0.0) {
+        r = ellipse(flwrp, vec2(0.065, 0.024) * 0.5, vec2(0.36, 0.96) * 0.5);
+    }
+    else {
+        r = ellipse(flwrp, vec2(0.065, 0.024) * 0.5, vec2(0.58, 0.96) * 0.5);
+    }
+
+    if(r > rstop) discard;
+
+    vec3 col = mix(vec3(1.0, 0.8, 0.75), vec3(1.0, 0.9, 0.87), r);
+    float grady = mix(0.0, 1.0, pow(coord.y * 0.5 + 0.5, 0.35));
+    col *= vec3(1.0, grady, grady);
+    col *= mix(0.8, 1.0, pow(abs(coord.x), 0.3));
+    col = col * diffuse + specular;
+
+    col = mix(fadeCol, col, distancefade);
+
+    float alpha = (rstop > 0.001)? (0.5 - r / (rstop * 2.0)) : 1.0;
+    alpha = smoothstep(0.0, 1.0, alpha) * palpha;
+
+    gl_FragColor = vec4(col * 0.5, alpha);
+}
+</script>
+<!-- effects -->
+<script id="fx_common_vsh" type="x-shader/x_vertex">
+uniform vec3 uResolution;
+attribute vec2 aPosition;
+
+varying vec2 texCoord;
+varying vec2 screenCoord;
+
+void main(void) {
+    gl_Position = vec4(aPosition, 0.0, 1.0);
+    texCoord = aPosition.xy * 0.5 + vec2(0.5, 0.5);
+    screenCoord = aPosition.xy * vec2(uResolution.z, 1.0);
+}
+</script>
+<script id="bg_fsh" type="x-shader/x_fragment">
+#ifdef GL_ES
+//precision mediump float;
+precision highp float;
+#endif
+
+uniform vec2 uTimes;
+
+varying vec2 texCoord;
+varying vec2 screenCoord;
+
+void main(void) {
+    vec3 col;
+    float c;
+    vec2 tmpv = texCoord * vec2(0.8, 1.0) - vec2(0.95, 1.0);
+    c = exp(-pow(length(tmpv) * 1.8, 2.0));
+    col = mix(vec3(0.02, 0.0, 0.03), vec3(0.96, 0.98, 1.0) * 1.5, c);
+    gl_FragColor = vec4(col * 0.5, 1.0);
+}
+</script>
+<script id="fx_brightbuf_fsh" type="x-shader/x_fragment">
+#ifdef GL_ES
+//precision mediump float;
+precision highp float;
+#endif
+uniform sampler2D uSrc;
+uniform vec2 uDelta;
+
+varying vec2 texCoord;
+varying vec2 screenCoord;
+
+void main(void) {
+    vec4 col = texture2D(uSrc, texCoord);
+    gl_FragColor = vec4(col.rgb * 2.0 - vec3(0.5), 1.0);
+}
+</script>
+<script id="fx_dirblur_r4_fsh" type="x-shader/x_fragment">
+#ifdef GL_ES
+//precision mediump float;
+precision highp float;
+#endif
+uniform sampler2D uSrc;
+uniform vec2 uDelta;
+uniform vec4 uBlurDir; //dir(x, y), stride(z, w)
+
+varying vec2 texCoord;
+varying vec2 screenCoord;
+
+void main(void) {
+    vec4 col = texture2D(uSrc, texCoord);
+    col = col + texture2D(uSrc, texCoord + uBlurDir.xy * uDelta);
+    col = col + texture2D(uSrc, texCoord - uBlurDir.xy * uDelta);
+    col = col + texture2D(uSrc, texCoord + (uBlurDir.xy + uBlurDir.zw) * uDelta);
+    col = col + texture2D(uSrc, texCoord - (uBlurDir.xy + uBlurDir.zw) * uDelta);
+    gl_FragColor = col / 5.0;
+}
+</script>
+<!-- effect fragment shader template -->
+<script id="fx_common_fsh" type="x-shader/x_fragment">
+#ifdef GL_ES
+//precision mediump float;
+precision highp float;
+#endif
+uniform sampler2D uSrc;
+uniform vec2 uDelta;
+
+varying vec2 texCoord;
+varying vec2 screenCoord;
+
+void main(void) {
+    gl_FragColor = texture2D(uSrc, texCoord);
+}
+</script>
+<!-- post processing -->
+<script id="pp_final_vsh" type="x-shader/x_vertex">
+uniform vec3 uResolution;
+attribute vec2 aPosition;
+varying vec2 texCoord;
+varying vec2 screenCoord;
+void main(void) {
+    gl_Position = vec4(aPosition, 0.0, 1.0);
+    texCoord = aPosition.xy * 0.5 + vec2(0.5, 0.5);
+    screenCoord = aPosition.xy * vec2(uResolution.z, 1.0);
+}
+</script>
+<script id="pp_final_fsh" type="x-shader/x_fragment">
+#ifdef GL_ES
+//precision mediump float;
+precision highp float;
+#endif
+uniform sampler2D uSrc;
+uniform sampler2D uBloom;
+uniform vec2 uDelta;
+varying vec2 texCoord;
+varying vec2 screenCoord;
+void main(void) {
+    vec4 srccol = texture2D(uSrc, texCoord) * 2.0;
+    vec4 bloomcol = texture2D(uBloom, texCoord);
+    vec4 col;
+    col = srccol + bloomcol * (vec4(1.0) + srccol);
+    col *= smoothstep(1.0, 0.0, pow(length((texCoord - vec2(0.5)) * 2.0), 1.2) * 0.5);
+    col = pow(col, vec4(0.45454545454545)); //(1.0 / 2.2)
+
+    gl_FragColor = vec4(col.rgb, 1.0);
+    gl_FragColor.a = 1.0;
+}
+</script>
+
+  <script src="js/index.js"></script>
+</body>
+</html>
