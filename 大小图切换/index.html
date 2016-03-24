@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+</style>
+<meta http-equiv="Content-Type" content="text/html; 
+charset=utf-8" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script  type='text/script' src='move.js'></script>
+<script type="text/javascript">
+function getByClass(oParent,sName)
+{
+    var oAll=document.getElementsByTagName('*');
+    var i;
+    var result=[];
+    for(i=0;i<oAll.length;i++)
+    {
+        if(oAll[i].className==sName)
+        {
+            result.push(oAll[i]);
+        }
+    }
+    return result;
+}
+window.onload=function ()
+{
+     var oDiv=document.getElementById('playimages');
+    var oBtnPrev=getByClass(oDiv, 'prev')[0];
+    var oBtnNext=getByClass(oDiv, 'next')[0];
+    var oMarkLeft=getByClass(oDiv, 'mark_left')[0];
+    var oMarkRight=getByClass(oDiv, 'mark_right')[0];
+    var  oSmallUl=getByClass(oDiv,'small_pic')[0].getElementsByTagName('ul')[0];
+    var  aSmallLi=oSmallUl.getElementsByTagName('li');
+    var oBigUl=getByClass(oDiv,'big_pic')[0];//上面大图的ul
+    var aBigLi=oBigUl.getElementsByTagName('li');
+    var  oText=getByClass(oDiv,'text')[0];
+    var  oLength=getByClass(oDiv,'length')[0];
+    var show=['暮色黄昏','黯然交接','青色可人','炫酷时尚','轮番指纹','五彩斑斓'];
+    var i;
+    var iNow=0;
+    var iMinZindex=2;
+    oSmallUl.style.width=aSmallLi[0].offsetWidth*aSmallLi.length+'px';
+    //左右两个按钮显示与消失事件
+    oMarkLeft.onmouseover=oBtnPrev.onmouseover=function()
+    {
+        startMove(oBtnPrev,'opacity',100);
+    }
+      oMarkLeft.onmouseout=oBtnPrev.onmouseout=function()
+    {
+        startMove(oBtnPrev,'opacity',0);
+    }
+    oMarkRight.onmouseover=oBtnNext.onmouseover=function()
+    {
+        startMove(oBtnNext,'opacity',100);
+    }
+     oMarkRight.onmouseout=oBtnNext.onmouseout=function()
+    {
+        startMove(oBtnNext,'opacity',0);
+    }
+   //点击小图，显示大图事件
+   //实现鼠标移入淡入，移出淡出
+   for(i=0;i<aSmallLi.length;i++)
+   {
+                 aSmallLi[i].index=i;
+                 aSmallLi[i].onmouseover=function()
+                {
+                       startMove(this,'opacity',100);
+                }
+                  aSmallLi[i].onmouseout=function()
+                {
+                    if(iNow!==this.index){
+                        startMove(this,'opacity',60);
+                    }
+                }
+                aSmallLi[i].onclick=function()
+                {
+                     if(iNow==this.index){return;}
+                     iNow=this.index;
+                     setDesign();  
+                     setText()
+                }      
+            //将函数封装
+             //点击大图两边的按钮，小图左右移动
+             oBtnPrev.onclick=function()
+             {
+                iNow--;//当出现第一张左移时，移到最后一张
+                if(iNow==-1)
+                {
+                    iNow=aSmallLi.length-1;
+                }
+                setDesign();
+                setText();
+             }
+            oBtnNext.onclick=function()
+             {
+                iNow++;
+                if(iNow==aSmallLi.length)//点击到最后一张时，切换到第一张
+                {
+                    iNow=0;
+                }
+                setDesign();
+                setText()
+             }
+   }
+      function  setText()
+               {
+                     for(i=0;i<aSmallLi.length;i++)
+                     {
+                            oLength.innerHTML=(iNow+1)+'/6';
+                            oText.innerHTML=show[iNow];
+                    }
+             }
+   setInterval(function(){
+    iNow++;
+    if(iNow>=aSmallLi.length)
+    {
+        iNow=0;
+    }
+    setDesign();
+    setText();
+
+   },1000)
+      function  setDesign()
+              {
+                 for(i=0;i<aSmallLi.length;i++)
+                     {
+                        startMove(aSmallLi[i],'opacity',60);
+                     }
+                    startMove(aSmallLi[iNow],'opacity',100);
+                   //点击小图，大图向下拉，高度为0，且索引值加1
+                   aBigLi[iNow].style.zIndex=iMinZindex++;
+                   aBigLi[iNow].style.height=0;
+                   startMove(aBigLi[iNow],'height',oBigUl.offsetHeight);
+                   //li元素居中，第一个和最后一个不动，让ul移动
+                   if(iNow==0)
+                   {
+                           startMove(aSmallLi[iNow],'left',0);
+                   }
+                   else if(iNow==aSmallLi.length-1)
+                   {
+                          startMove(oSmallUl,'left',-(iNow-2)*aSmallLi[0].offsetWidth);
+                   }
+                   else
+                   {
+                            startMove(oSmallUl,'left',-(iNow-1)*aSmallLi[0].offsetWidth);
+                   }
+             }
+   
+   
+}
+
+function  getStyle(obj,attr)//用此种方法获取样式中的属性
+{
+     if(obj.currentStyle)
+     {
+        return obj.currentStyle[attr];
+     }
+     else
+     {
+        return getComputedStyle(obj,false)[attr];
+     }
+}
+function startMove(obj,attr,iTarget)
+{
+        clearInterval(obj.timer);
+       obj.timer=setInterval(function (){
+        var iCur=0;
+        if(attr=='opacity')
+        {
+            iCur=parseInt(parseFloat(getStyle(obj, attr))*100);//这里加parseInt是避免div的数值不稳定，在波动
+        }
+        else
+        {
+            iCur=parseInt(getStyle(obj, attr));
+        }
+        
+        var iSpeed=(iTarget-iCur)/8;
+        iSpeed=iSpeed>0?Math.ceil(iSpeed):Math.floor(iSpeed);
+        
+        if(iCur==iTarget)
+        {
+            clearInterval(obj.timer);
+        }
+        else
+        {
+            if(attr=='opacity')
+            {
+                obj.style.filter='alpha(opacity:'+(iCur+iSpeed)+')';
+                obj.style.opacity=(iCur+iSpeed)/100;
+            }
+            else
+            {
+                obj.style[attr]=iCur+iSpeed+'px';
+            }
+        }
+    }, 30)
+}
+</script>
+</head>
+<body >
+<div id="playimages" class="play">
+    <ul class="big_pic">
+        <div class="prev"></div>
+        <div class="next"></div>
+        <div class="text">加载图片说明……</div>
+        <div class="length">计算图片数量……</div>
+        <a class="mark_left" href="javascript:;"></a>
+        <a class="mark_right" href="javascript:;"></a>
+        <div class="bg"></div>
+        <li style="z-index:1;"><img src="images/1.jpg" /></li>
+        <li><img src="images/2.jpg" /></li>
+        <li><img src="images/3.jpg" /></li>
+        <li><img src="images/4.jpg" /></li>
+        <li><img src="images/5.jpg" /></li>
+        <li><img src="images/6.jpg" /></li>
+    </ul>
+    <div class="small_pic">
+        <ul style="width:390px;">
+            <li style="filter: 100; opacity: 1;"><img src="images/1.jpg" /></li>
+            <li><img src="images/2.jpg" /></li>
+            <li><img src="images/3.jpg" /></li>
+            <li><img src="images/4.jpg" /></li>
+            <li><img src="images/5.jpg" /></li>
+            <li><img src="images/6.jpg" /></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

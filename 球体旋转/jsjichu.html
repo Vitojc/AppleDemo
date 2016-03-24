@@ -1,0 +1,63 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title>currentStyle的封装</title>
+<style>
+    #div1{
+        width: 100px;
+        height: 100px;
+        background: #ccc;
+    }
+</style>
+<script type="text/javascript">
+    /*function  css()
+    {
+          if(arguments.length==3)
+          {
+            arguments[0].style[arguments[1]]=arguments[2];
+          }
+          else if(arguments.length==2)
+          {
+             return arguments[0].style[arguments[1]];
+          }
+    }*/
+    window.onload=function()
+    {
+         /*var oDiv=document.getElementById('div1');
+         var oBtn=document.getElementById('btn');
+        /* oBtn.onclick=function()
+         {
+            //css(oDiv,'background','green')//设置背景颜色为绿色
+            //alert(css(oDiv,'width'));
+            alert(oDiv.currentStyle.width);
+         }*/
+         //alert(getComputedStyle(oDiv,false).width);//这种方法在火狐下可用
+         /*var xx=[];
+         xx['btn']=[1,2,3];
+         xx['div']=['red','white','blue'];
+         //xx['btn'].push(4);//往数组最后面中增加元素
+         //xx['div'].pop();//删除数组最后比一个元素
+         xx['btn'].unshift(4);//向数组的开头添加元素
+         xx['div'].shift();//删除数组开头的第一个元素
+         xx['div'].sort();//分类函数
+         for(var i  in xx)
+         {
+            alert(xx[i]);//如果想获取数组的数组中的元素，用双重循环进行
+         }*/
+         var xx=[1,33,5,68,44,23];
+         xx.sort(function(num1,num2)
+            {
+                   return  num1-num2;//从小往大的排列，num2-num1从大往小的排列
+            });
+         alert(xx);  
+    };
+</script>
+</head>
+<body>
+<input type="button" value="提交" id='btn'>
+<div id='div1'>
+</div>
+</body>
+</html>
+
+

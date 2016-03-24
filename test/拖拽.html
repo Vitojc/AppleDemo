@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+#div1 {width:100px; height:100px; background:red; position:absolute;}
+#div2 {width:100px; height:100px; background:yellow; position:absolute;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>拖拽--面向对象</title>
+<script>
+window.onload=function()
+{
+    new Drag('div1');
+    new Drag('div2');
+}
+function  Drag(id)
+{
+     var _this=this;//这个this表示p1
+     this.disx=0;
+     this.disy=0;
+     this.oDiv=document.getElementById(id);
+     this.oDiv.onmousedown=function(ev){//按下的时候有个事件，传递给下面的事件
+        _this.fnDown(ev);
+        return false;
+     }
+}; 
+Drag.prototype.fnDown=function(ev)
+{
+        var _this=this;
+        var oEvent=ev||event;
+        this.disx=oEvent.clientX-this.oDiv.offsetLeft;
+        this.disy=oEvent.clientY-this.oDiv.offsetTop;
+        document.onmousemove=function(ev){//移动的时候有个事件
+              _this.fnMove(ev);
+        }
+        document.onmouseup=function(){
+             _this.fnUp();
+        }
+};  
+ Drag.prototype.fnMove=function(ev)
+{
+            var oEvent=ev||event;
+            this.oDiv.style.left=oEvent.clientX-this.disx+'px';
+            this.oDiv.style.top=oEvent.clientY-this.disy+'px';
+};
+Drag.prototype.fnUp=function()
+{
+         document.onmousemove=null;
+         document.onmouseup=null;
+};
+</script>
+</head>
+<body>
+<div id="div1">
+</div>
+<div id="div2">
+</div>
+</body>
+</html>

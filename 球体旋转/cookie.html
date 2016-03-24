@@ -1,0 +1,39 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style></style>
+<script type="text/javascript">
+function setCookie(name,value,day)
+{
+            var oDate=new Date();
+           oDate.setDate(oDate.getDate()+day);
+            document.cookie=name+'='+value+';expires='+oDate;
+}
+function getCookie(name)
+{
+    var aar=document.cookie.split('; ');
+    var i;
+    for(i=0;i<aar.length;i++)
+    {
+        var arr2=aar[i].split('=');
+        if(arr2[0]==name){return arr2[1];}
+    }
+}
+function  removeCookie(name)
+{
+    setCookie(name,'1',-1);
+}
+//setCookie('username','abcd','30');
+//setCookie('password','1234','10');
+alert(getCookie('username'));
+removeCookie('username');
+alert(getCookie('username'));
+  
+</script>
+</head>
+<body>
+</body>
+</html>
+
+

@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style></style>
+<script type="text/javascript">
+function  time(day)
+{
+    switch(day)
+    {
+        case  0:return  '星期日';
+        case  1:return  '星期一';
+
+    }
+}
+window.onload=function()
+{
+      var  xx=new Date();//掌握case的用法
+      var  str=xx.getFullYear()+'年'+(xx.getMonth()+1)+'月'+xx.getDate()+'日'+time(xx.getDay());
+      alert(str);
+};
+
+</script>
+</head>
+<body>
+</body>
+</html>
+
+

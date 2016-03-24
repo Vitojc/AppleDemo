@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style></style>
+<script type="text/javascript">
+function setCookie(name,value,day)
+{
+            var oDate=new Date();
+           oDate.setDate(oDate.getDate()+day);
+            document.cookie=name+'='+value+';expires='+oDate;
+}
+function getCookie(name)
+{
+    var aar=document.cookie.split(';');
+    var i;
+    for(i=0;i<aar.length;i++)
+    {
+        var arr2=aar[i].split('=');
+        if(arr2[0]==name){return arr2[1];}
+    }
+}
+function  removeCookie(name)
+{
+    setCookie(name,'1',-1);
+}
+   window.onload=function()
+   {
+      var form=document.getElementById('form1');
+      var  ouser=document.getElementsByName('user')[0];
+      var  oa=document.getElementsByTagName('a')[0];
+      form.onsubmit=function()
+      {
+          setCookie('user',ouser.value,30);
+      };
+      ouser.value=getCookie('user');
+      oa.onclick=function()
+      {
+             removeCookie('user');
+             ouser.value='';
+      };
+   };
+</script>
+</head>
+<body>
+<form action="http:www.baidu.com" id='form1'>
+用户名：<input type="text" name='user' >
+密码：<input type="password" name='pass'>
+<input type="submit" value="提交">
+<a href="javascript:;">清楚记录</a>
+</form>
+</body>
+</html>
+
+

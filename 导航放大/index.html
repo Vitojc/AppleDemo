@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+img{width: 64px;}
+#div1{position: absolute;bottom: 0;text-align: center;width: 100%}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var oDiv=document.getElementById('div1');
+    var oImg=document.getElementsByTagName('img');
+    var oInput=document.getElementsByTagName('input');
+    var i;
+    var disx=0;
+    var disy=0;
+    document.onmousemove=function(ev)
+    {
+        var oEvent=ev||event;
+        for(i=0;i<oImg.length;i++)
+        {
+            disx=oImg[i].offsetLeft+oImg[i].offsetWidth/2;//offsetTop是相对父级而言，所以图片的offsetTop均为0
+            disy=oImg[i].offsetTop+oImg[i].offsetWidth/2+oDiv.offsetTop;
+            //j计算鼠标与每张图片中心的x,y之差
+            //如何使图片中间大,两边小
+            var x=oEvent.clientX-disx;
+            var y=oEvent.clientY-disy;
+            var c=Math.sqrt(x*x+y*y);
+            var fin=1-(c/250);
+            if(fin<0.5){fin=0.5;}
+            oImg[i].style.width=fin*128+'px';
+            oInput[i].value=fin.toFixed(2);
+        }
+    }
+    for(i=0;i<oImg.length;i++)
+    {
+        oImg[i].onmouseover=function()
+        {
+            document.write(oImg[i].title);
+        }
+    }
+   
+}
+</script>
+</head>
+<body >
+<input type="text">
+<input type="text">
+<input type="text">
+<input type="text">
+<input type="text">
+<div id="div1">
+<img src='images/1.png' title="我的首页" >
+<img src='images/2.png' title="博客">
+<img src='images/3.png' title="我的书架">
+<img src='images/4.png' title="javascrtipt">
+<img src='images/5.png' title="css">
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title>检查框</title>
+<style>
+    .error{
+        color:red;
+        font-size: 30px;
+    }
+</style>
+<script type="text/javascript">
+    window.onload = function()
+    {
+         var  text=document.getElementById('text');
+         var  btn=document.getElementById('btn');
+         var error=text.parentNode.getElementsByTagName('span')[0];
+         var xx=text.value;
+         btn.onclick=function()
+         {
+             
+                    error.innerHTML='不能为空';
+               
+                  
+
+         };
+   };
+</script>
+</head>
+<body>
+<h2>Events  Search</h2>
+<p>Date in the format DD/MM/YYYY</p>
+<input  type="text" id='text'><input type="button" value="Check" id='btn'>
+<br>
+(example 26/04/1975) <br>
+<span  class="error"></span>
+</body>
+</html>
+
+

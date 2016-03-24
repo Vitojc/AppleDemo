@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+div{height:100px; width:100px;background:red; margin-top: 20px;opacity: 0.3}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var aDiv=document.getElementsByTagName('div');
+    var i=0;
+  for(i=0;i<aDiv.length;i++)
+  {
+    aDiv[i].alpha=30;
+    aDiv[i].timer=null;
+    aDiv[i].onmouseover=function ()
+    {
+      getStyle(this, 100);
+    }
+    aDiv[i].onmouseout=function ()
+    {
+      getStyle(this, 30);
+    }
+  }
+}
+//var alpha; ---为什么出现滑快点时，一个div还没消失，另一个又出现的现象？
+//此时只有一个alpha，而当鼠标移出时，alpha不断变小，而进入另外一个div时，alpha不断变大，故出现此种情况
+function getStyle(obj,iTarget)
+{
+      clearInterval(obj.timer);
+      obj.timer=setInterval(function (){
+    var iSpeed=(iTarget-obj.alpha)/8;
+    iSpeed=iSpeed>0?Math.ceil(iSpeed):Math.floor(iSpeed);
+    
+    if(obj.alpha==iTarget)
+    {
+      clearInterval(obj.timer);
+    }
+    else
+    {
+      obj.alpha+=iSpeed;
+      obj.style.filter='alpha(opacity:'+obj.alpha+')';
+      obj.style.opacity=obj.alpha/100;
+    }
+  }, 30);
+}
+</script>
+</head>
+<body >
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+</body>
+</html>

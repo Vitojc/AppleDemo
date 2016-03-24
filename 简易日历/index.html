@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title>简易日历</title>
+<style>
+    .div1{
+        width: 280px;
+        height: 500px;
+        background: #ccc;
+        margin-left: 300px;
+    }
+    .div1 ul{
+        width: 280px;
+        padding-top: 20px;
+    }
+    .div1 li{
+          margin: 5px 10px 0 0;
+          list-style: none;
+          width: 65px;
+          height: 65px;
+          background: black;
+          color: white;
+          float: left;
+
+    }
+    .div1 li h2{
+        padding-left: 25px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+    .div1 li p{
+         padding-left: 18px;
+        margin-top: 0px;
+    }
+    .div1 .active{
+        background: white;
+        color: red;
+    }
+    
+   .text{
+        width: 220px;
+        background: white;
+        position: absolute;top: 350px;
+        margin-left: 20px;
+    }
+    .text h2{
+        margin-top: 0px;
+        padding-left: 10px;
+    }
+    .text p{
+        padding-left: 10px;
+    }
+</style>
+<script type="text/javascript">
+       var  atext=[
+       '你好啊',
+       '加油',
+       '相信自己',
+       '珍惜',
+       '勇气',
+       '大度',
+       '无私',
+       '宽容',
+       '包容',
+       '放下一切',
+       'anyway',
+       '你干嘛'];
+       window.onload=function()
+       {
+                   var  div=document.getElementById('div');
+                   var ali=div.getElementsByTagName('ul')[0].getElementsByTagName('li');
+                   var  text=document.getElementById('div2');
+                   var i;
+                   for(i=0;i<ali.length;i++)
+                   {
+                         ali[i].index=i;
+                         ali[i].onmouseover=function()
+                         {
+                            for(i=0;i<ali.length;i++)
+                            {
+                                ali[i].className='';
+                            }
+                            this.className='active';//注意都是用this.index
+                            text.innerHTML='<h2>'+(this.index+1)+'月活动</h2><p>'+atext[this.index]+'</p>';
+                         };
+                   }s
+
+       };
+      
+</script>
+</head>
+<body>
+<div  id='div' class='div1'>
+    <ul>
+      <li class='active'><h2>1</h2><p>JAN</p></li>
+      <li><h2>2</h2><p>FER</p></li>
+      <li><h2>3</h2><p>MAR</p></li>
+      <li><h2>4</h2><p>APR</p></li>
+      <li><h2>5</h2><p>MAY</p></li>
+      <li><h2>6</h2><p>JUN</p></li>
+      <li><h2>7</h2><p>JUL</p></li>
+      <li><h2>8</h2><p>AUG</p></li>
+      <li><h2>9</h2><p>SEP</p></li>
+      <li><h2>10</h2><p>OCT</p></li>
+       <li><h2>11</h2><p>NOV</p></li>
+      <li><h2>12</h2><p>DEC</p></li>
+    </ul>
+    <div id='div2' class='text'>
+     <h2>1月活动</h2>
+     <p>过年了啊啊啊  </p>
+    </div>
+</div>
+</body>
+</html>
+
+

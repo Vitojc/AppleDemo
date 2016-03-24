@@ -1,0 +1,54 @@
+HTML {
+	FONT-SIZE: 16px; MIN-HEIGHT: 100%; MARGIN-BOTTOM: 1px
+}
+BODY {
+	FONT-SIZE: 62.5%; BACKGROUND: url(../images/bg.jpg) #22384d repeat-x; COLOR: #555555; FONT-FAMILY: Verdana, Arial, sans-serif
+}
+A {
+	COLOR: #0f67a1; TEXT-DECORATION: none
+}
+A:hover {
+	TEXT-DECORATION: underline
+}
+#wrapper {
+	BACKGROUND: url(../images/sidebar_bg.jpg) white repeat-y right top
+}
+#content {
+	
+}
+#content H1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 2.4em; MARGIN: 30px 0px 50px; LINE-HEIGHT: 32px
+}
+#content P {
+	FONT-SIZE: 1.4em; MARGIN-BOTTOM: 20px; LINE-HEIGHT: 22px
+}
+#gallery {
+	POSITION: relative
+}
+#pictures {
+	POSITION: relative; HEIGHT: 408px
+}
+#pictures IMG {
+	LEFT: 0px; POSITION: absolute; TOP: 0px
+}
+#prev {
+	MARGIN-TOP: 30px; FONT-SIZE: 2em; TEXT-ALIGN: center
+}
+#next {
+	MARGIN-TOP: 30px; FONT-SIZE: 2em; TEXT-ALIGN: center
+}
+#footer {
+	MARGIN: 50px 0px 20px; TEXT-ALIGN: center
+}
+#sidebar {
+	
+}
+#sidebar UL {
+	MARGIN-TOP: 20px
+}
+#sidebar UL LI {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 1.2em; PADDING-BOTTOM: 20px; LINE-HEIGHT: 18px; PADDING-TOP: 20px; BORDER-BOTTOM: #dddcdc 1px solid
+}
+#sidebar UL LI H2 {
+	FONT-SIZE: 1.2em; MARGIN-BOTTOM: 8px
+}

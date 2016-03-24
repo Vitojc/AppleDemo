@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+#div1 {width:100px; height:100px; background:red; position:absolute;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script>
+function setCookie(name,value,day)
+{
+            var oDate=new Date();
+            oDate.setDate(oDate.getDate()+day);
+            document.cookie=name+'='+value+';expires='+oDate;
+}
+function getCookie(name)
+{
+    var aar=document.cookie.split('; ');//注意cookie单独分隔分号和空格，如果没有导致没有top值！
+    var i;
+    for(i=0;i<aar.length;i++)
+    {
+        var arr2=aar[i].split('=');
+        if(arr2[0]==name){return arr2[1];}
+    }
+    return '';
+}
+function  removeCookie(name)
+{
+    setCookie(name,'1',-1);
+}
+window.onload=function ()
+{
+  var oDiv=document.getElementById('div1');
+  var disX=0;
+  var disY=0;
+  var x=getCookie('x');
+  var y=getCookie('y');
+  if(x)
+  {
+    oDiv.style.left=x+'px';
+    oDiv.style.top=y+'px';
+  }
+  oDiv.onmousedown=function (ev)
+  {
+    var oEvent=ev||event;
+    disX=oEvent.clientX-oDiv.offsetLeft;
+    disY=oEvent.clientY-oDiv.offsetTop;
+    document.onmousemove=function (ev)
+    {
+      var oEvent=ev||event;
+      var l=oEvent.clientX-disX;
+      var t=oEvent.clientY-disY;
+      if(l<0){l=0;}
+      else if(l>document.documentElement.clientWidth-oDiv.offsetWidth)
+      {
+        l=document.documentElement.clientWidth-oDiv.offsetWidth;
+      }
+      if(t<0){t=0;}
+      else if(t>document.documentElement.clientHeight-oDiv.offsetHeight)
+      {
+        t=document.documentElement.clientHeight-oDiv.offsetHeight;
+      }
+      oDiv.style.left=l+'px';
+      oDiv.style.top=t+'px';
+    };
+    document.onmouseup=function ()
+    {
+      document.onmousemove=null;
+      document.onmouseup=null;
+      setCookie('x',oDiv.offsetLeft,30);
+      setCookie('y',oDiv.offsetTop,30);
+    };
+    return false;
+  };
+};
+</script>
+</head>
+
+<body>
+<div id="div1"></div>
+</body>
+</html>

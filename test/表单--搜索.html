@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var oTab=document.getElementById('table1');
+    var oTxt=document.getElementById('txt1');
+    var oBtn=document.getElementById('btn1');
+    var i;
+    //如何搜索多个关键词？
+    oBtn.onclick=function()
+    {
+      for(i=0;i<oTab.tBodies[0].rows.length;i++)
+      {
+                    var  iValue=oTab.tBodies[0].rows[i].cells[1].innerHTML.toLowerCase();//全部转换为小写
+                    var  iTvalue=oTxt.value.toLowerCase();
+                    var arr=iTvalue.split(' ');//分隔单词
+                    var bool=false;
+                    for(var  j  in arr)
+                    {
+                      if(iValue.search(arr[j])!=-1)//search（）方法
+                      {
+                         bool=true;//遍历数组，如果找到则令bool为true
+                         break;
+                      }
+                    }
+                   if(bool) 
+                   {
+                      oTab.tBodies[0].rows[i].style.background='yellow';
+                   }
+                   else
+                   {
+                        oTab.tBodies[0].rows[i].style.background='';
+                    }
+
+      }
+     
+    }  
+}
+</script>
+</head>
+<body >
+<input type="text" id='txt1'>
+<input type="button" id="btn1" value="搜索">
+<table id='table1' border="1" width="400">
+<thead>
+    <tr>
+         <td>编号</td>
+         <td>姓名</td>
+         <td>操作</td>
+    </tr>
+</thead>
+<tbody>
+     <tr>
+         <td>1</td>
+         <td>luncy</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>2</td>
+         <td>leo</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>3</td>
+         <td>jack</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>4</td>
+         <td>blue</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>5</td>
+         <td>john</td>
+         <td></td>
+     </tr>
+</tbody>
+ </table>
+</body>
+</html>

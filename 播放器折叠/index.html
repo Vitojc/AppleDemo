@@ -1,0 +1,50 @@
+<html >
+<head>
+<meta charset='utf-8'>
+<title>网页换肤</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="style.js">
+</script>
+</head>
+<body>
+<script>
+function  setHide()
+{
+    var  xx=document.getElementById('div3');
+     xx.style.display='none';
+     var yy=document.getElementById('pic');
+     xx.style.display='none';
+     var zz=document.getElementById('pic2');
+     xx.style.display='block;'  
+}
+function  setDisplay()
+{
+    var  xx=document.getElementById('div3');
+    xx.style.display='block';
+    var yy=document.getElementById('pic');
+     xx.style.display='block';
+     var zz=document.getElementById('pic2');
+     xx.style.display='none;' 
+
+}
+</script>
+  
+     <div id='div2'>
+     <h2>播放列表</h2>
+     <img id='pic'  src='images/up.gif'  onclick="setHide();">
+     <img id='pic2'  src='images/down.gif'  onclick="setDisplay();">
+     </div>
+     <div id='div3'>
+         <ul>
+         <li><a href="#">不分手的恋爱---汪苏泷</a></li>
+         <li><a href="#">专属味道---汪苏泷</a></li>
+         <li><a href="#">小星星---汪苏泷</a></li>
+         <li><a href="#">征服---那英</a></li>
+         <li><a href="#">春天里---汪峰</a></li>
+         <li><a href="#">爱的华尔兹---张翰</a></li>
+         <li><a href="#">青春不会来---小虎队</a></li>
+         </ul>
+     </div>
+ 
+</body>
+</html>

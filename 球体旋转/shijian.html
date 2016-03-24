@@ -1,0 +1,42 @@
+<shtml>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style>
+    #div1{width: 200px;height: 150px;background: #ccc;position: absolute;}
+</style>
+<script type="text/javascript">
+ /* document.onclick=function(ev)
+  {
+    alert(ev.clientX+', '+ev.clientY);//FF下用ev，IE下用event
+  };*/
+/*window.onload=function(){
+var oBtn=document.getElementById('btn');
+var oDiv=document.getElementById('div1');
+oBtn.onclick=function(ev)
+{
+         oDiv.style.display='block';
+         ev.cancelBubble='true';
+
+}
+document.onclick=function()
+{
+       oDiv.style.display='none';
+}
+};*/
+document.onmousemove=function(ev)
+{
+           var oDiv=document.getElementById('div1');
+            oDiv.style.left=ev.clientX;
+            oDiv.style.top=ev.clientY;
+};
+</script>
+</head>
+<body>
+<input  type="button" value="显示" id='btn'>
+<div id='div1'>
+</div>
+</body>
+</html>
+
+

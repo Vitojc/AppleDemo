@@ -1,0 +1,17 @@
+body { 
+    margin-top: 40px; 
+    background: url('image/bg.gif')  repeat center center; 
+}
+
+#div2{
+    width: 400px;
+    height: 400px;
+    background: #E5EDF2;
+    border: 1px solid  #CDCDCD;
+    padding-left: 200px;
+    margin-left: 200px;
+}
+#div2 h2{
+    color: green;
+    font-size: 15px;
+}

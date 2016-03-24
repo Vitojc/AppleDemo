@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript">
+function createPeople(name,sex)
+{
+        //var obj=new  Object();//每个对象，都占用一个资源
+        this.name=name;
+        this.sex=sex;
+        this.showName=function()
+        {
+            alert('我的名字是:'+this.name);
+        }
+         this.showSex=function()
+        {
+            alert('我的性别是:'+this.sex);
+        }
+        return this;
+}
+var p1=new createPeople('luncy','female');
+var p2=new createPeople('forever','male');
+p1.showName();
+p1.showSex();
+p2.showName();
+p2.showSex();
+
+</script>
+</head>
+<body >
+</body>
+</html>

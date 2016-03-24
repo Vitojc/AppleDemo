@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script>
+window.onload=function ()
+{
+    var oImg=document.getElementById('img1');//第一张图片
+    var aImg=document.getElementsByTagName('img');
+    var lastimage=oImg;
+    var x=0;//鼠标拖动某一个点，用该点的位置，来改变src
+    var speed=0;
+    var lastx=0;
+    var timer=null;
+    var temp=0;
+    for(i=0;i<77;i++)
+    {
+        var oNewImage=document.createElement('img');
+        oNewImage.src='img/miaov ('+i+').jpg';  
+        oNewImage.style.display='none';
+        document.body.appendChild(oNewImage);//先把77张都设为隐藏
+    }
+    document.onmousedown=function(ev)
+    {
+        clearInterval(timer);
+        var oEvent=ev||event;
+        var disx=oEvent.clientX-x;
+        document.onmousemove=function(ev)
+        {
+             var oEvent=ev||event;
+             x=oEvent.clientX-disx;
+             setMove();  
+             speed=x-lastx;//记录前后两个速度
+             lastx=x;
+            return false;
+        }
+        document.onmouseup=function()
+        {
+             document.onmousemove=null;
+             document.onmouseup=null;
+             timer=setInterval(function(){
+                x+=speed;
+                setMove();
+                 document.title=speed;
+             },30);
+
+        }
+        function setMove()
+        {
+             if(speed>0){speed--;}
+              else if(speed==0){clearInterval(timer);}
+              else {speed++;}
+              temp=-x;//temp要设为全局变量
+             if(temp>0)
+             {
+                temp=-x%77;
+             }
+             else
+             {
+                temp=-x+(-Math.floor(-x/77)*77);
+             }
+             //oImg.src='img/miaov ('+temp+').jpg';  //这里外面要用单引号 
+             //alert(aImg.length);
+             lastimage.style.display='none';//先让最后一张变为none（刚开始也为第一张，没有移动时，第一张图片是显示的）
+             aImg[temp].style.display='block';//再让当前的变为block
+             lastimage=aImg[temp];
+         
+             document.title=temp;
+        }
+        return false;
+    }    
+}
+</script>
+</head>
+<body>
+<img id="img1" src="img/miaov (0).jpg" />
+<!--<div id="bg"></div>
+<div id="prog">
+    妙味课堂——360度全景展示 载入中......<span>0%</span>
+    <div id="bar"></div>
+</div>-->
+</body>
+</html>

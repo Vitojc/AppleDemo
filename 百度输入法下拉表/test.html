@@ -1,0 +1,27 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style></style>
+<script type="text/javascript">
+    window.onload = function(){
+    var obj_lis = document.getElementById("test").getElementsByTagName("li");
+    for(i=0;i<obj_lis.length;i++){
+        obj_lis[i].onclick = function(){
+            alert(this.innerHTML);
+        }
+    }
+}
+</script>
+</head>
+<body>
+<ul id="test">
+    <li>Glen</li>
+    <li>Tane</li>
+    <li>John</li>
+    <li>Ralph</li>
+</ul>
+</body>
+</html>
+
+

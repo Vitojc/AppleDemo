@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style></style>
+<script type="text/javascript">
+   window.onload=function()
+   {
+            var oUl=document.getElementById('ul');
+           /* var i;
+            for(i=0;i<oUl.childNodes.length;i++)
+            {
+                if(oUl.childNodes[i].nodeType==1)
+                {
+                    oUl.childNodes[i].style.background='red';
+                }
+            }*/
+           // var first=oUl.firstChild||oUl.firstElementChild;
+            //first.style.back='red';
+            var aBox=getByClass(oUl,'box');
+            var i;
+            for(i=0;i<aBox.length;i++)
+            {
+                aBox[i].style.background='red';
+            }
+   };
+   function  getByClass(ul,className)
+   {
+            var result=[];
+            var   aAll=ul.getElementsByTagName('*');
+            var i;
+            for(i=0;i<aAll.length;i++)
+            {
+                if(aAll[i].className==className)  //名字相等，不需要加单引号或双引号
+                {
+                    result.push(aAll[i]);//将符合条件的注入数组中
+                }
+            }
+            return  result;
+   }
+</script>
+</head>
+<body>
+<ul  id='ul'>
+    <li></li>
+    <li></li>
+    <li  class="box"></li>
+    <li></li>
+    <li  class="box"></li>
+    <li></li>
+</ul>
+</body>
+</html>
+
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+#div1{width: 100px;height: 100px;background: red;position: absolute;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript">
+var speedX=16;
+var speedY=8;
+function startMove()
+{
+    setInterval(function(){
+        var oDiv=document.getElementById('div1');
+        speedY+=3;
+        var l=oDiv.offsetLeft+speedX;
+        var h=oDiv.offsetTop+speedY;//注意这是高度啊！
+        if(h>=document.documentElement.clientHeight-oDiv.offsetHeight)
+        {
+             speedY*=-0.8;
+              speedX*=0.8;
+             h=document.documentElement.clientHeight-oDiv.offsetHeight;
+        }
+        else if(h<=0)
+        {
+             speedY*=-1;
+             h=0;
+        }
+       if(l>=document.documentElement.clientWidth-oDiv.offsetWidth)
+        {
+            speedX*=-0.8;
+            l=document.documentElement.clientWidth-oDiv.offsetWidth
+        }
+        else if(l<=0)
+        {
+             speedX*=0.8;
+             l=0;
+        }
+        if(Math.abs(speedX)<1){speedX=0;}//解决小数问题
+         if(Math.abs(speedY)<1){speedY=0;}
+        oDiv.style.left=l+'px';
+        oDiv.style.top=h+'px';
+    },30);
+}
+window.onload=function ()
+{
+      var oBtn=document.getElementById('btn1');
+      oBtn.onclick=function()
+      {
+        startMove();
+      }
+}
+</script>
+</head>
+<body >
+<input type="button" id="btn1" value="开始运动">
+<div id="div1">
+</div>
+</body>
+</html>

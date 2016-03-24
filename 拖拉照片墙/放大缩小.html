@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+#div1 {width:10px; height:10px; background:url(images/1.gif); position:absolute;bottom: 0;right: 0}
+#div2{width: 200px;height: 200px;position: relative;background: #ccc;}
+.box{border: 1px solid black;position: absolute;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script>
+window.onload=function ()//凡是被拖拽的物体，其必须定位为absolute
+{
+    var oDiv=document.getElementById('div1');
+     var oDiv2=document.getElementById('div2');
+    oDiv.onmousedown=function (ev)
+    {
+        var oEvent=ev||event;
+        var disX=oEvent.clientX-oDiv.offsetLeft;
+        var disY=oEvent.clientY-oDiv.offsetTop;
+
+        var oNewDiv=document.createElement('div');
+        //oNewDiv.className='box';
+        oNewDiv.style.width=oDiv.offsetWidth-2+'px';
+        oNewDiv.style.height=oDiv.offsetHeight-2+'px';
+        
+         oNewDiv.style.left=oDiv.offsetLeft+'px';
+         oNewDiv.style.top=oDiv.offsetTop+'px';
+        document.body.appendChild(oNewDiv);
+        document.onmousemove=function (ev)
+        {
+            var oEvent=ev||event;
+            oDiv2.style.width=oEvent.clientX-disX+'px';
+            oDiv2.style.height=oEvent.clientY-disY+'px';
+        };
+        document.onmouseup=function ()
+        {
+            document.onmousemove=null;
+            document.onmouseup=null;
+            document.body.removeChild(oNewDiv);
+            oDiv.style.left=oDiv2.style.left;
+            oDiv.style.top=oDiv2.style.top;
+        };
+    };
+};
+</script>
+</head>
+
+<body>
+<div id='div2'>
+     <div id="div1">
+     </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+* {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; outline: none
+}
+BODY {
+	FONT: 12px/14px Helvetica, Arial, sans-serif; COLOR: #cc3030; BACKGROUND-COLOR: #fff7cc; TEXT-ALIGN: center
+}
+IMG {
+	DISPLAY: inline; BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+.clearfix {
+	
+}
+.clearfix:unknown {
+	CLEAR: both; DISPLAY: block; VISIBILITY: hidden; HEIGHT: 0px; content: "."
+}
+* HTML .clearfix {
+	HEIGHT: 1%
+}
+.clearfix {
+	DISPLAY: block
+}
+A {
+	COLOR: #444; TEXT-DECORATION: underline
+}
+A:hover {
+	TEXT-DECORATION: none
+}
+#container {
+	MARGIN: 0px auto 10px; WIDTH: 782px; TEXT-ALIGN: left
+}
+#header {
+	MARGIN-BOTTOM: 20px; PADDING-TOP: 20px; POSITION: relative
+}
+#maincaption {
+	MARGIN: 10px 20px 0px; WIDTH: 560px; LINE-HEIGHT: 165%
+}
+#links {
+	PADDING-RIGHT: 6px; PADDING-LEFT: 6px; LEFT: 600px; PADDING-BOTTOM: 0px; BORDER-LEFT: #ccc 1px solid; WIDTH: 160px; PADDING-TOP: 0px; POSITION: absolute; TOP: 80px
+}
+H3 {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; FONT: 12px/14px Helvetica, Arial, sans-serif; COLOR: #fff7cc; PADDING-TOP: 2px; BACKGROUND-COLOR: #cc3030; TEXT-ALIGN: center
+}
+#links UL {
+	LIST-STYLE-TYPE: none
+}
+#links UL LI A {
+	PADDING-RIGHT: 2px; DISPLAY: block; PADDING-LEFT: 4px; PADDING-BOTTOM: 2px; COLOR: #cc3030; PADDING-TOP: 2px; TEXT-DECORATION: none
+}
+#links UL LI A:hover {
+	COLOR: #fff7cc; BACKGROUND-COLOR: #cc3030
+}
+#slider {
+	BORDER-RIGHT: #333 1px solid; BORDER-TOP: #333 1px solid; MARGIN: 0px auto; BORDER-LEFT: #333 1px solid; BORDER-BOTTOM: #333 1px solid; BACKGROUND-COLOR: #fff
+}
+#slider .floating {
+	MARGIN-TOP: 10px
+}
+#slider UL {
+	WIDTH: 690px; LIST-STYLE-TYPE: none; HEIGHT: 348px
+}
+#slider UL LI {
+	FLOAT: left; MARGIN: 0px 6px; WIDTH: 320px; PADDING-TOP: 6px; HEIGHT: 480px; TEXT-ALIGN: center
+}
+#slider UL LI A {
+	COLOR: #333; HEIGHT: auto; TEXT-DECORATION: none
+}
+#slider UL LI A:hover {
+	TEXT-DECORATION: underline
+}
+#slider UL LI IMG {
+	DISPLAY: block
+}
+.floating {
+	FLOAT: left
+}
+#butleft {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#butright {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#butleft IMG {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#butright IMG {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#butleft {
+	MARGIN-LEFT: 1px; MARGIN-RIGHT: 4px
+}
+#butright {
+	MARGIN-LEFT: 4px
+}
+#controls {
+	MARGIN: 0px auto; WIDTH: 100px
+}
+#texts {
+	MARGIN: 16px auto 4px; WIDTH: 330px; HEIGHT: 140px
+}
+.text {
+	BORDER-RIGHT: #333 1px solid; PADDING-RIGHT: 12px; BORDER-TOP: #333 1px solid; PADDING-LEFT: 12px; PADDING-BOTTOM: 12px; OVERFLOW: auto; BORDER-LEFT: #333 1px solid; WIDTH: 300px; COLOR: #333; PADDING-TOP: 12px; BORDER-BOTTOM: #333 1px solid; HEIGHT: 100px; BACKGROUND-COLOR: #fff
+}
+#footer {
+	BORDER-TOP: #666 1px solid; MARGIN: 0px auto; WIDTH: 600px; COLOR: #666; PADDING-TOP: 4px; TEXT-ALIGN: center
+}
+#footer A {
+	COLOR: #444; TEXT-DECORATION: underline
+}
+#footer A:hover {
+	TEXT-DECORATION: none
+}

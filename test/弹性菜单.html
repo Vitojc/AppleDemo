@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>弹性菜单</title>
+<style>
+* { padding: 0; margin: 0; }
+li { list-style: none; }
+
+ul { width: 400px; height: 30px; position: relative; margin: 100px auto 0; }
+li { float: left; width: 98px; height: 28px; line-height: 28px; border: 1px solid #ccc; text-align: center; z-index: 2; position: relative; cursor: pointer; }
+.bg { width: 100px; height: 5px; overflow: hidden; background: red; border: none; position: absolute; top: 24px; left: 0; z-index: 1; }
+</style>
+<script type="text/javascript">
+var speed=0;
+var left=0;//style.left只能为整数，此设置一个变量
+function startMove(obj,target)
+{
+         clearInterval(obj.timer);
+         obj.timer=setInterval(function(){
+              speed+=(target-obj.offsetLeft)/5;
+              speed*=0.7;//设置摩擦力
+              left+=speed;//弹性运动中特有的解决办法
+              if(Math.abs(speed)<1&&Math.abs(left-target)<1)//j绝对值
+              {
+                clearInterval(obj.timer);
+                obj.style.left=target;
+                //alert('关了');
+              }
+              else
+              {
+                 obj.style.left=left+'px';
+                 document.title=obj.offsetLeft+'|'+target+'|'+speed;
+              }
+         },30)
+}
+window.onload=function()
+{
+     var oUl=document.getElementById('ul1');
+     var oLi=oUl.getElementsByTagName('li');
+     var oBg=oLi[oLi.length-1];
+     var i;
+     for(i=0;i<oLi.length-1;i++)
+     {
+        oLi[i].onmouseover=function()
+        {
+            startMove(oBg,this.offsetLeft);
+        }
+     }
+};
+</script>
+</head>
+<body>
+<ul id="ul1">
+    <li>首页</li>
+    <li>关于我们</li>
+    <li>产品</li>
+    <li>联系方式</li>
+    <li class="bg"></li>
+</ul>
+</body>
+</html>

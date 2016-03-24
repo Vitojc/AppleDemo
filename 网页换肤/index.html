@@ -1,0 +1,27 @@
+<html >
+<head>
+<meta charset='utf-8'>
+<title>网页换肤</title>
+<link id="link1" href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<script>
+function pOne()
+{
+  var xx=document.getElementById('link1');
+  xx.href='style.css';
+}
+function pTwo()
+{
+var xx=document.getElementById('link1');
+  xx.href='style2.css';
+}
+</script>
+  <div id='div1'>
+      <div id='div2'>
+       <h2>请选择皮肤</h2>
+       <input type="button" value="皮肤1"  onclick="pOne();"> <input type="button" value="皮肤2" onclick="pTwo();">
+      </div>
+  </div>
+</body>
+</html>

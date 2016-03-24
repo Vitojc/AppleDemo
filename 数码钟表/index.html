@@ -1,0 +1,78 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title>钟表</title>
+<style>
+    body{
+        background: #29033E;
+        color: #FFFF00;
+        font-size: 50px;
+    }
+  .div{
+    background: url(images/bg.png);
+    width: 500px;
+    height: 500px;
+    margin-left: 400px;
+    margin-top: 50px;
+  }
+  #xx{
+    margin-top: 50px;
+    margin-left: 100px;
+  }
+</style>
+<script type="text/javascript">
+function  trans(num)
+{
+          if(num<10)
+            return '0'+num;
+        else
+            return ''+num;
+}
+    window.onload=function(){
+         function  update(){
+        var div=document.getElementById('div');
+        var img=div.getElementsByTagName('img');
+        var  xx=new Date();
+        var  str=trans(xx.getHours())+trans(xx.getMinutes())+trans(xx.getSeconds());
+        var i;
+         for(i=0;i<img.length;i++)
+         {
+             img[i].src='images/'+str.charAt(i)+'.png';      //注意charAt的用法,拆分，得到第几个元素
+         }
+     }
+       setInterval(update,1000);
+       update();//防止刷新时出现回归原图的
+
+    };
+</script>
+</head>
+<body>
+    <div class="div"  id='div'>
+               <p align="center">炫酷时钟</p>
+                      <img src='images/0.png'>
+                      <img src='images/0.png'>
+                     时
+                      <img src='images/0.png'>
+                      <img src='images/0.png'>
+                      分
+                      <img src='images/0.png'>
+                      <img src='images/0.png'>
+                     秒
+
+
+
+
+                
+
+
+
+
+
+
+             
+    </div>
+
+</body>
+</html>
+
+

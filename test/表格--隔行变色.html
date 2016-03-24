@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var oTab=document.getElementById('table1');
+    var oTxt=document.getElementById('txt1');
+    var oBtn=document.getElementById('btn1');
+    var i;
+    var oldColor=null;
+    var length=oTab.tBodies[0].rows.length;
+    for(i=0;i<oTab.tBodies[0].rows.length;i++)
+    {
+        oTab.tBodies[0].rows[i].style.background=i%2?'#ccc':' ';
+         //当鼠标移入变为黄色
+        oTab.tBodies[0].rows[i].onmouseover=function()
+        {
+            oldColor=this.style.background;
+            this.style.background='yellow';
+        }
+        //鼠标移出时变回原色可利用将原色储存在一个变量里调用进行
+         oTab.tBodies[0].rows[i].onmouseout=function()
+        {
+            this.style.background=oldColor;
+        }
+    }  
+    oBtn.onclick=function()
+    {
+       var oTr=document.createElement('tr');
+       var oTd=null;
+       //第一个td
+       oTd=document.createElement('td');
+       oTd.innerHTML=++length;
+       oTr.appendChild(oTd);
+       //第二个td
+        oTd=document.createElement('td');
+       oTd.innerHTML=oTxt.value;
+       oTr.appendChild(oTd);
+        //第三个td
+        oTd=document.createElement('td');
+       oTd.innerHTML="<a  href=''javascript:;''>删除</a>";
+       oTr.appendChild(oTd);
+       //删除点击链接改行的元素
+       oTd.getElementsByTagName('a')[0].onclick=function()
+       {
+              oTab.tBodies[0].removeChild(this.parentNode.parentNode);//移除子节点
+       }
+         oTab.tBodies[0].appendChild(oTr);//注意tBodies不能少
+    } 
+   
+
+}
+</script>
+</head>
+<body >
+<input type="text" id='txt1'>
+<input type="button" id="btn1" value="增加">
+<table id='table1' border="1" width="400">
+<thead>
+    <tr>
+         <td>编号</td>
+         <td>姓名</td>
+         <td>操作</td>
+    </tr>
+</thead>
+<tbody>
+     <tr>
+         <td>1</td>
+         <td>luncy</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>2</td>
+         <td>leo</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>3</td>
+         <td>jack</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>4</td>
+         <td>blue</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>5</td>
+         <td>john</td>
+         <td></td>
+     </tr>
+</tbody>
+ </table>
+</body>
+</html>

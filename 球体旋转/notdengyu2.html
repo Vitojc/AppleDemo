@@ -1,0 +1,28 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style></style>
+<script type="text/javascript">
+   window.onload=function()
+   {
+         var oTxt=document.getElementById('text1');
+         oTxt.onkeydown=function(ev)//注意是事件发生的keycode
+         {
+                if(ev.keyCode!=8&&(ev.keyCode<48||ev.keyCode>57))
+                {
+                    return  false;
+                }
+
+                
+         };
+
+   };
+</script>
+</head>
+<body>
+<input type="text" id='text1'>
+</body>
+</html>
+
+

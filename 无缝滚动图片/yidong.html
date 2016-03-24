@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style>
+    #div1{
+        width: 80px;
+        height: 80px;
+        background: #ccc;
+        position: absolute;
+        left: 0px;
+    }
+</style>
+<script type="text/javascript">
+    window.onload=function()
+    {
+        var  btn1=document.getElementById('btn1');
+        var btn2=document.getElementById('btn2');
+        var  div1=document.getElementById('div1');
+        var timer=null;
+        btn1.onclick=function()
+        {
+            timer=setInterval(
+                function()
+                {
+                     div1.style.left=div1.offsetLeft+5+'px';
+                },100);
+            
+        };
+         btn2.onclick=function()
+         {
+                clearInterval(timer);
+         };
+    }
+</script>
+</head>
+<body>
+<input  type="button" id='btn1' value="打开定时器">
+<input  type="button" id='btn2' value="关闭定时器">
+<div id='div1'>
+</div>
+</body>
+</html>
+
+

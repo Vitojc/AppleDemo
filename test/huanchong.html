@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style>
+    #div1{width: 100px;height: 100px;background: red;left: 0px;position: absolute;}
+    span{width: 1px;height: 300px;background: black;left: 300px;position: fixed;}
+</style>
+<script type="text/javascript">
+   window.onload=function()
+   {
+      var oBtn=document.getElementById('btn1');
+      var oDiv=document.getElementById('div1');
+      oBtn.onclick=function(){
+        stareMove(300);
+    }
+   };
+   function stareMove(target)
+   {
+     var oBtn=document.getElementById('btn1');
+      var oDiv=document.getElementById('div1');
+      var time=null;
+      clearInterval(time);
+         time=setInterval(function(){
+              var speed=(target-oDiv.offsetLeft)/8;//Math.ceil()向上取整 Math.floor()向下取整
+              if(speed>0){ speed=Math.ceil(speed);}
+              else{speed=Math.floor(speed);}
+           if(oDiv.offsetLeft==300)
+           {
+                clearInterval(time);
+           }
+           else
+           {
+               oDiv.style.left=oDiv.offsetLeft+speed+'px';
+           }
+        },30);
+   }
+</script>
+</head>
+<body>
+<input type="button" id='btn1' value="开始运动">
+<div id='div1'></div>
+<span></span>
+</body>
+</html>
+
+

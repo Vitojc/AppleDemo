@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style></style>
+<script  src="Ajax2.js"></script>
+<script type="text/javascript">
+   window.onload=function()
+   {
+         var oBtn=document.getElementById('btn1');
+         oBtn.onclick=function()
+         {
+                ajax('1.txt',function(str){
+                    alert(str);
+                })
+         };
+   };
+</script>
+</head>
+<body>
+点击按钮的时候读取1.txt文本<br>
+<input type="button" value="提交" id='btn1'>
+</body>
+</html>
+
+

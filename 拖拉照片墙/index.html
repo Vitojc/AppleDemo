@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+body{background:black;margin: 0;padding: 0;color: white;font-size: 50px;}
+p{position: absolute;width:20px;margin-left: 50px;}
+#ul1{width: 690px;position: relative;margin: 20px auto;}
+#ul1 li{list-style: none;float: left;margin: 10px;width: 200px;height: 150px;z-index: 1;border:  5px solid  white;}
+#ul1 .active{border:  5px solid  yellow;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script src="move2.js"></script>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var oUl=document.getElementById('ul1');
+    var oLi=oUl.getElementsByTagName('li');
+    var sTore=[];
+    var i;
+    var iMinZindex=2;
+    //进行布局转换
+    for(i=0;i<oLi.length;i++)
+    {
+         sTore[i]={left:oLi[i].offsetLeft,top:oLi[i].offsetTop};//用数组存储每个li的左边距和高度
+
+    }
+    for(i=0;i<oLi.length;i++)
+    {
+         oLi[i].style.left=sTore[i].left+'px';
+         oLi[i].style.top=sTore[i].top+'px';
+         oLi[i].style.position='absolute';
+         oLi[i].style.margin=0;
+         oLi[i].index=i;
+    }
+    //图片拖拽处理
+    for(i=0;i<oLi.length;i++)
+    {
+        setDrags(oLi[i]);
+    }
+    function  setDrags(obj)
+    {
+        obj.onmousedown=function(ev)
+        {
+             //层级问题
+            obj.style.zIndex=iMinZindex++;
+            var oEvent=ev||event;
+            var disx=oEvent.clientX-obj.offsetLeft;
+            var disy=oEvent.clientY-obj.offsetTop;
+            document.onmousemove=function(ev)
+            {
+               
+                var oEvent=ev||event;
+                obj.style.left=oEvent.clientX-disx+'px';//注意加px
+                obj.style.top=oEvent.clientY-disy+'px';
+                for(i=0;i<oLi.length;i++)
+                {
+                    oLi[i].className='';
+                }
+                var oNear=findNearest(obj);
+                if(oNear)//如果是最近的那个物体
+                {
+                    oNear.className='active';
+                }
+            };
+            document.onmouseup=function()
+            {
+                 document.onmousemove=null;
+                 document.onmousedown=null;
+                 //交换两物体的位置
+                 var oNear=findNearest(obj);
+                 if(oNear)
+                 {
+                    startMove(oNear,sTore[obj.index]);
+                    startMove(obj,sTore[oNear.index]);
+                    //交换索引值
+                    var temp;
+                    temp=obj.index;
+                    obj.index=oNear.index;
+                    oNear.index=temp;
+
+                 }
+                 else
+                 {
+                    startMove(obj,sTore[obj.index])//回到自己的位置
+                 }
+                 return false;
+            };
+            clearInterval(obj.timer);
+            return false;
+        };
+    }
+//发生碰撞，使被碰的图片加边框,进行碰撞检测
+function  IBoundTest(obj1,obj2)
+{
+    var l1=obj1.offsetLeft;
+    var r1=obj1.offsetLeft+obj1.offsetWidth;
+    var t1=obj1.offsetTop;
+    var b1=obj1.offsetTop+obj1.offsetHeight;
+    
+    var l2=obj2.offsetLeft;
+    var r2=obj2.offsetLeft+obj2.offsetWidth;
+    var t2=obj2.offsetTop;
+    var b2=obj2.offsetTop+obj2.offsetHeight;
+    if(r1<l2||l1>l2||b1<t2||t1>b2)//没有碰撞
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+
+}
+//得到两个物体之间的距离
+function  getDis(obj1,obj2)
+{
+    var a=obj1.offsetLeft-obj2.offsetLeft;
+    var b=obj1.offsetTop-obj2.offsetTop;
+    return Math.sqrt(a*a+b*b);
+}
+//发生碰撞，当与多个碰撞时，取其距离最小的图片
+function  findNearest(obj)
+{
+    var iMin=9999999;
+    var iMindex=-1;
+    var i;
+    for(i=0;i<oLi.length;i++)
+    {
+         if(obj==oLi[i]){continue;}
+         if(IBoundTest(obj,oLi[i]))//如果两个物体碰撞上
+         {
+                
+                 var dis=getDis(obj,oLi[i]);
+                 if(iMin>dis)
+                 {
+                      iMin=dis;
+                      iMindex=i;
+                 }
+         }
+    }
+    if(iMindex==-1){return null;}
+    else
+    {
+        return oLi[iMindex];//返回最近的那个
+    }
+}
+
+
+   
+}
+</script>
+</head>
+<body >
+<p>照片墙</p>
+<ul id="ul1">
+ <li><img src="images/1.jpg"></li>
+ <li><img src="images/2.jpg"></li>
+ <li><img src="images/3.jpg"></li>
+ <li><img src="images/4.jpg"></li>
+ <li><img src="images/5.jpg"></li>
+ <li><img src="images/1.jpg"></li>
+ <li><img src="images/2.jpg"></li>
+ <li><img src="images/3.jpg"></li>
+ <li><img src="images/4.jpg"></li>
+</ul>
+</body>
+</html>

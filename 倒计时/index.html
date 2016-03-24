@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>倒计时 - 妙味课堂 - www.miaov.com</title>
+<!--[if lte IE 6]>
+<script src="js/DD_belatedPNG_0.0.8a.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('a');
+    </script>
+<![endif]-->
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var  oDiv=document.getElementById('fill_in');
+    var  oYear=oDiv.getElementsByTagName('input')[0];//凡是标签必带[]号！
+    var  oMonth=oDiv.getElementsByTagName('input')[1];
+    var  oDay=oDiv.getElementsByTagName('input')[2];
+    var  oGo=document.getElementById('go2');
+    var  iDay=document.getElementById('day');
+    var  iHour=document.getElementById('hour');
+    var  iMin=document.getElementById('min');
+    var  iSec=document.getElementById('sec');
+    oGo.onclick=function()
+    {
+     timer=setInterval(getDate,1000);
+    document.getElementById('target').getElementsByTagName('strong')[0].innerHTML=oYear.value+'年'+oMonth.value+'月'+oDay.value+'日';
+    getDate(); 
+    }
+    function getDig(num,n)
+    {
+        var str=''+num;
+        if(str.length<n)
+        {
+            str='0'+num;
+        }
+        return str;
+    }
+    function getDate()
+    {
+       var  oDateEnd=new Date();//即输入框中输入的日期
+       var  oDateNow=new Date();//当前时间
+       var remain=0;
+       var d=0;
+       var h=0;
+       var m=0;
+       var s=0;
+       oDateEnd.setFullYear(parseInt(oYear.value));
+       oDateEnd.setMonth(parseInt(oMonth.value));
+       oDateEnd.setDate(parseInt(oDay.value));
+       oDateEnd.setHours(0);
+      oDateEnd.setMinutes(0);
+      oDateEnd.setSeconds(0);
+      remain=(oDateEnd.getTime()-oDateNow.getTime())/1000;//秒
+      if(remain<0)
+      {
+        clearInterval(timer);
+        remain=0;
+        alert('时间已过期');
+      }
+      var day=parseInt(remain/86400);
+      remain%=86400;//求模，得到剩余的数
+      var hour=parseInt(remain/3600);
+      remain%=3600;
+      var min=parseInt(remain/60);
+      remain%=60;
+      var sec=remain;
+      iDay.innerHTML=getDig(day,3);
+      iHour.innerHTML=getDig(hour,2);
+      iMin.innerHTML=getDig(min,2);
+      iSec.innerHTML=getDig(sec,2);
+    }
+}
+</script>
+<body>
+
+<div id="miaov">
+    <div id="fill_in">
+        <span class="title">请输入：</span>
+        <input type="text" class="long_text" value="2012" />
+        <span class="space1">年</span>
+        <input type="text" class="text" value="12" />
+        <span class="space2">月</span>
+        <input type="text" class="text" value="22" />
+        <span class="space3">日</span>
+    </div>
+
+    <a href="javascript:;" id="go" class="go"></a>
+    <a href="javascript:;" id="go2" class="active"></a>
+
+    <p id="target">
+        现在距离 -
+        <strong>2012年12月22日</strong>
+        - 还剩：
+    </p>
+
+    <div id="date">
+        <p id="day">000</p>
+        <p id="hour">00</p>
+        <p id="min">00</p>
+        <p id="sec">00</p>
+    </div>
+
+    <h1 title="妙味课堂-www.miaov.com"><a href="http://www.miaov.com"></a></h1>
+</div>
+
+</body>
+</html>

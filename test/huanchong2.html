@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+#div1 {width:100px; height:100px; background:red; position:absolute; right:0;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script type="text/javascript">
+window.onscroll=function ()
+{
+    var oDiv=document.getElementById('div1');
+    var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+    var t=scrollTop+(document.documentElement.clientHeight-oDiv.offsetHeight)/2+'px';
+    startMove(parseInt(t));
+
+}
+var time=null;
+function startMove(target)
+{
+          var oDiv=document.getElementById('div1');
+          clearInterval(time);
+          time=setInterval(function()
+            {
+                var speed=(target-oDiv.offsetTop)/8;
+                speed=speed>0?Math.ceil(speed):Math.floor(speed);
+                if(oDiv.style.top==target){clearInterval(time);}
+                else{oDiv.style.top=oDiv.offsetTop+speed+'px';}
+                txt1.value=oDiv.offsetTop+',目标：'+target;
+            },30);
+}
+</script>
+</head>
+
+<body style="height:2000px;">
+<input id="txt1" type="text" style="position:fixed; top:20px;" />
+<div id="div1"></div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+#div{width:100px; height:100px; background:red;opacity: 0.3}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>多个div运动</title>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var aDiv=document.getElementById('div');
+    aDiv.onmouseover=function()
+    {
+         startMove(aDiv,'opacity',100);
+    }
+      aDiv.onmouseout=function()
+    {
+        startMove(aDiv,'opacity',30);
+    }
+
+};
+function  getStyle(obj,attr)//用此种方法获取样式中的属性
+{
+     if(obj.currentStyle)
+     {
+        return obj.currentStyle[attr];
+     }
+     else
+     {
+        return getComputedStyle(obj,false)[attr];//getComputedStyle(对象，随便什么数)[属性]
+     }
+}
+function startMove(obj,attr,iTarget)
+{
+        clearInterval(obj.timer);
+       obj.timer=setInterval(function (){
+        var iCur=0;
+        if(attr=='opacity')
+        {
+            iCur=parseInt(parseFloat(getStyle(obj, attr))*100);//这里加parseInt是避免div的数值不稳定，在波动
+        }
+        else
+        {
+            iCur=parseInt(getStyle(obj, attr));
+        }
+        
+        var iSpeed=(iTarget-iCur)/8;
+        iSpeed=iSpeed>0?Math.ceil(iSpeed):Math.floor(iSpeed);
+        
+        if(iCur==iTarget)
+        {
+            clearInterval(obj.timer);
+        }
+        else
+        {
+            if(attr=='opacity')
+            {
+                obj.style.filter='alpha(opacity:'+(iCur+iSpeed)+')';
+                obj.style.opacity=(iCur+iSpeed)/100;
+                
+                document.getElementById('text').value=obj.style.opacity;
+            }
+            else
+            {
+                obj.style[attr]=iCur+iSpeed+'px';
+            }
+        }
+    }, 30)
+}
+</script>
+</head>
+<body>
+<input type="text" id='text'>
+<div id='div'></div>
+</body>
+</html>

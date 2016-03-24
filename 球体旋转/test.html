@@ -1,0 +1,42 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>水晶球</title>
+    <style>
+             #div1
+             {
+                             z-index:4; position: absolute; top:50%;  margin:0 auto; margin-top:-175px; left:50%; margin-left:-175px; width:350px; height:350px; background-image:url(shuijing.png);
+             }
+             #div2{
+                     z-index:10; position: absolute; top:50%;  border:2px solid #ccc;margin:0 auto; margin-top:-175px; left:50%; margin-left:-175px;
+             }
+    </style>
+    <script type="text/javascript" src="coos.ui.rotate.js"></script>
+</head>
+<body>
+    <div id="div1">
+    </div>
+    <div id="div2">
+        <img alt="" id="image" border="0" src="star.png" />
+    </div>
+    <script type="text/javascript">
+   var setTime;
+        window.onload = function () {
+            GetRTime();
+        }
+        function GetRTime() {
+            rotateLeft('image', 1); //顺时针1度旋转
+            var divObj = document.getElementById("div2");
+            var divObj_Width = divObj.offsetHeight;
+            var divObj_Height = divObj.offsetWidth;
+            divObj.style.marginLeft = "-" + (divObj_Width / 2) + "px";
+            divObj.style.marginTop = "-" + (divObj_Height / 2) + "px";
+            //rotateRight('theimage', 90); //逆时针90度旋转
+            setTime = setTimeout(function () { GetRTime() }, 10)
+        }
+        function stopTime(){
+            clearTimeout(setTime);
+        }
+    </script>
+</body>
+</html>

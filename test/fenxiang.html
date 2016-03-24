@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style>
+    #div1{width: 100px;height: 200px;background: #ccc;left:-100px;position: absolute;top: 20px;}
+    #div1 span{width: 20px;height: 60px;background: yellow;left: 100px;top: 70px;line-height: 20px;position: absolute;}
+</style>
+<script type="text/javascript">
+   window.onload=function()
+   {
+       var oDiv=document.getElementById('div1');
+       oDiv.onmouseover=function()//给div加事件
+       {
+        startMove(0);
+       }
+       oDiv.onmouseout=function()
+       {
+        startMove(-100);
+       }
+     
+   };
+   var time=null;
+   function startMove(target)
+   {
+       var oDiv=document.getElementById('div1');
+       var speed=0;
+       clearInterval(time);
+       time=setInterval(function()
+        {
+          if(oDiv.offsetLeft<target){speed=10;}
+          else{speed=-10;}
+          if(oDiv.offsetLeft==target){clearInterval(time);}
+          else{
+          oDiv.style.left=oDiv.offsetLeft+speed+'px';
+        }
+        },30);
+   }
+</script>
+</head>
+<body>
+<div id='div1'>
+  <span>分享到</span>
+</div>
+
+</body>
+</html>
+
+

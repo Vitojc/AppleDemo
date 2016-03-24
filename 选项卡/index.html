@@ -1,0 +1,232 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title>选项卡</title>
+<style>
+* { padding: 0; margin: 0; }
+li { list-style: none; }
+img { border: none; }
+body{
+    font-size: 13px;
+    color: #999;
+    margin-top: 50px; 
+    background: #f0fcff;
+}
+#div1{
+    width:480px;
+    margin: 0 auto; position: relative;
+     
+}
+#div1 .head{
+    position: relative; 
+    
+}
+#div1 .head ul{
+    width: 480px; 
+    height: 44px; 
+    border-left: 1px solid #d4d4d4; 
+    border: 1px solid #d4d4d4;
+    
+}
+#div1 .head li{
+    float: left;
+    height: 44px;
+    line-height: 44px;
+    border-right: 1px solid #CDCDCD;
+    background: white;
+
+}
+#div1 .head  li a{
+    height: 44px;
+    text-decoration: none;
+    padding:0 15px;
+    color: green;
+    float: left; 
+}
+
+#div1 .head .active { 
+background: #ccc; 
+}
+#div1 .head .active  a{ 
+     color: #333;
+     font-weight: bold; 
+ }
+ .head #more{
+  position: absolute;top: 20px;left: 420px;   
+  color: #999;
+  text-decoration: none; 
+}
+.head #more:hover{
+    color:green;
+    text-decoration: underline;
+}
+#div1 #content{
+    width: 490px;
+}
+#div1 #content .one{
+    width: 480px;
+    height: 150px;
+    border: 1px solid #CDCDCD;
+   display: none;
+}
+.one .pic{
+    width: 198px;
+    height: 120px;
+    margin-left: 10px;
+    margin-top: 15px;
+    border: 1px solid #CDCDCD;
+    background: #ccc;
+    float: left;
+    margin-right: 0px;
+}
+.one .pic img{
+    margin: 8px;
+}
+.one .con{
+    float: right;
+    width: 250px;
+    list-style: none;
+    margin-top: 4px;
+    padding-left: 0px; display: inline-block; 
+    
+}
+.one .con li{
+ width: 232px; font-family: arial; line-height: 20px; margin-bottom: 0px;padding-bottom: 0px;
+ padding: 0px;
+ margin: 0px;
+ margin-top: 5px;
+}
+.one .con h2 a{
+    font-size: 13px;
+     padding-left: 0px;
+     text-decoration: none;
+}
+.one .con h2 a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.one .con h2 span{
+    font-size: 13px;
+    font-weight: bold;
+    color: #999;
+    padding-left: 0px;
+    margin: 0px;
+}
+</style>
+<script type="text/javascript">
+    window.onload=function()
+    {
+    var oTab=document.getElementById('div1');
+    var aLi=getByClass(oTab, 'head')[0].getElementsByTagName('li');
+    var aA=oTab.getElementsByTagName('ul')[0].getElementsByTagName('a');
+    var aDiv=getByClass(oTab, 'one');
+    var i=0;
+    aDiv[0].style.display='block';
+    for(i=0; i<aLi.length; i++)
+    {
+       
+        aLi[i].index=i;
+        aLi[i].onclick=function()
+        {
+            for(i=0; i<aLi.length; i++)
+            {
+                aLi[i].className='';
+                aDiv[i].style.display='none';
+            }
+             this.className='active';
+            aDiv[this.index].style.display='block';
+            
+        };
+        aA[i].onfocus=function(){this.blur();};
+    }    
+};
+function getByClass(oParent, sClassName)
+{
+    var aElm=oParent.getElementsByTagName('*');
+    var aArr=[];
+    for(var i=0; i<aElm.length; i++)
+    {
+        if(aElm[i].className==sClassName)
+        {
+            aArr.push(aElm[i]);
+        }
+    }
+    return aArr;
+}
+</script>
+</head>
+<body>
+<div id='div1'>
+     <div class='head'>
+          <ul>
+          <li class='active'><a href="#">妙味课堂</a></li>
+          <li><a href="#">妙味茶馆</a></li>
+          <li><a href="#">精通javascript开发课程</a></li>
+          </ul>
+          <a href="http:www.baidu.com" id='more'>>>更多</a>
+     </div>
+     <div id='content'>
+             <!-- 第一个div层 -->
+           <div class="one"  style="display:block;">
+               <div class='pic'>
+               <img src='images/1.jpg'>
+               </div>
+               <ul class='con'>
+                        <li>
+                         <h2><a href="#">妙味课堂周六聚会活动现场</a><span>----------Blue</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+                         <li>
+                         <h2><a href="#">课程常见问题集合</a><span>----------------------Leno</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+                         <li>
+                         <h2><a href="#">妙味课堂JS结课课程标准</a><span>----------Blue</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+               </ul>
+           </div>
+           <!-- 第二个底层 -->
+            <div class="one">
+               <div class='pic'>
+               <img src='images/2.jpg'>
+               </div>
+               <ul class='con'>
+                        <li>
+                         <h2><a href="#">妙味课堂JS教学视屏</a><span>----------Blue</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+                         <li>
+                         <h2><a href="#">妙味生活秀</a><span>----------------------Leno</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+                         <li>
+                         <h2><a href="#">妙味课堂特效-兜儿</a><span>----------Blue</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+               </ul>
+           </div>
+           <!-- 第三个底层 -->
+            <div class="one">
+               <div class='pic'>
+               <img src='images/3.jpg'>
+               </div>
+               <ul class='con'>
+                        <li>
+                         <h2><a href="#">精通javascript开发课程</a><span>----------Blue</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+                         <li>
+                         <h2><a href="#">高级页面精品课程开发</a><span>----------Leno</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+                         <li>
+                         <h2><a href="#">零基础网页教学视屏</a><span>----------Blue</span></h2>
+                         <p>点击：223  2011.3.22</p>
+                        </li>
+               </ul>
+           </div>
+     </div>
+</div>
+</body>
+</html>

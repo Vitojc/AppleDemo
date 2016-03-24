@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+* {margin:0; padding:0;}
+#ul1 {width:366px; margin:0 auto; position:relative;}
+#ul1 li {list-style:none; width:100px; height:100px; background:#CCC; border:1px solid black; float:left; margin:10px;z-index: 1}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>布局转换</title>
+<script src="perfectMove.js"></script>
+<script>
+window.onload=function ()
+{
+           var oUl=document.getElementById('ul1');
+           var oLi=oUl.getElementsByTagName('li');
+           var i=0;
+           var index=2;
+           for(i=0;i<oLi.length;i++)
+           {
+              //oLi[i].innerHTML='top:'+oLi[i].offsetTop+',left'+oLi[i].offsetLeft;
+              //将css写的样式转换为js写的布局
+              oLi[i].style.left=oLi[i].offsetLeft+'px';
+              oLi[i].style.top=oLi[i].offsetTop+'px';
+           }
+           for(i=0;i<oLi.length;i++)
+           {
+                oLi[i].style.position='absolute';
+                oLi[i].style.margin='0';//这里是oLi[i]
+           }
+           for(i=0;i<oLi.length;i++)
+           {
+                oLi[i].onmouseover=function()
+                {
+                    this.style.zIndex=index++;
+                    startMove(this,{width:200,height:200,marginLeft:-50,marginTop:-50});
+                }
+                 oLi[i].onmouseout=function()
+                {
+                    this.style.zIndex=index++;
+                    startMove(this,{width:100,height:100,marginLeft:0,marginTop:0});
+                }
+
+           }
+
+
+
+};
+</script>
+</head>
+
+<body>
+<ul id="ul1">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+</body>
+</html>

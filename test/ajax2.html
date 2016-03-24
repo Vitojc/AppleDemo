@@ -1,0 +1,38 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<style>
+    #div1{width: 200px;height: 150px;border: 1px solid #ccc;}
+</style>
+<script  src="Ajax2.js"></script>
+<script type="text/javascript">
+   window.onload=function()
+   {
+          var oDiv=document.getElementById('div1');
+          var oPut=document.getElementsByTagName('input');
+          var i;
+          for(i=0;i<oPut.length;i++)
+          {
+            oPut[i].index=i;
+            oPut[i].onclick=function()
+            {
+                ajax(this.index+1+'.txt',function(str)
+                {
+                      oDiv.innerHTML=str;
+                })
+            };
+          }
+   };
+</script>
+</head>
+<body>
+<input type="button" value="按钮1">
+<input type="button" value="按钮2">
+<input type="button" value="按钮3">
+<div id='div1'>
+</div>
+</body>
+</html>
+
+

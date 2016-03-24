@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript">
+window.onload=function ()
+{
+    var oTab=document.getElementById('table1');
+    var oBtn=document.getElementById('btn1');
+    var bool=true;
+    oBtn.onclick=function()
+    {
+      //1转换数组
+       var i=0;
+      var arr=[];
+      for(i=0;i<oTab.tBodies[0].rows.length;i++)//注意是tBodies[0]！
+      {
+        arr[i]=oTab.tBodies[0].rows[i];
+      }
+      //2对转换后的数组分类--注意这种方法
+      arr.sort(function(tr1,tr2){
+        if(bool)
+        {
+        return parseInt(tr1.cells[0].innerHTML)-parseInt(tr2.cells[0].innerHTML);
+        }
+        else
+        {
+            return parseInt(tr2.cells[0].innerHTML)-parseInt(tr1.cells[0].innerHTML);
+        }
+      });
+      //3重新遍历转换后的数组，依次插入到原数组后面 
+      for(i=0;i<arr.length;i++)
+      {
+        oTab.tBodies[0].appendChild(arr[i]);
+      }
+      //点击一下为升序，再点为降序
+      bool=!bool;
+     // if(bool){bool=false;}
+      //else{bool=true;}
+    }  
+}
+</script>
+</head>
+<body >
+<input type="button" id="btn1" value="排序">
+<table id='table1' border="1" width="400">
+<thead>
+    <tr>
+         <td>编号</td>
+         <td>姓名</td>
+         <td>操作</td>
+    </tr>
+</thead>
+<tbody>
+     <tr>
+         <td>1</td>
+         <td>luncy</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>2</td>
+         <td>leo</td>
+         <td></td>
+     </tr>
+      <tr>
+         <td>6</td>
+         <td>john</td>
+         <td></td>
+     </tr>
+      
+       <tr>
+         <td>4</td>
+         <td>blue</td>
+         <td></td>
+     </tr>
+      <tr>
+         <td>3</td>
+         <td>jack</td>
+         <td></td>
+     </tr>
+       <tr>
+         <td>5</td>
+         <td>john</td>
+         <td></td>
+     </tr>
+</tbody>
+ </table>
+</body>
+</html>
